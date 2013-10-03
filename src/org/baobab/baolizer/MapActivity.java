@@ -13,6 +13,10 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.LinearLayout;
 import ch.hsr.geohash.GeoHash;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -30,11 +34,13 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class MapActivity  extends FragmentActivity implements
-        LoaderCallbacks<Cursor>, OnInfoWindowClickListener, OnMapClickListener {
+        LoaderCallbacks<Cursor>, OnInfoWindowClickListener,
+        OnMapClickListener, OnCheckedChangeListener {
 
     private static final String TAG = "Baolizer";
     private HashMap<String, String> podioId;
     private GoogleMap map;
+    private LinearLayout types;
 
     /** Called when the activity is first created. */
     @Override
@@ -49,14 +55,30 @@ public class MapActivity  extends FragmentActivity implements
                         new LatLng(48.138790, 11.553338), 12, 90, 0)));
         map.setOnMapClickListener(this);
         map.setOnInfoWindowClickListener(this);
+        types = (LinearLayout) findViewById(R.id.content);
+        for (int i = 0; i < types.getChildCount(); i++) {
+            ((CheckBox) types.getChildAt(i)).setOnCheckedChangeListener(this);
+        }
         getSupportLoaderManager().initLoader(0, null, this);
         startService(new Intent(this, RefreshService.class));
     }
 
     @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        getSupportLoaderManager().restartLoader(0, null, this);
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
+        String where = "types IS 'none'";
+        for (int i = 0; i < types.getChildCount(); i++) {
+            CheckBox typ = (CheckBox) types.getChildAt(i);
+            if (typ.isChecked()) {
+                where += " OR types LIKE '%" + typ.getText() + "%'";
+            }
+        }
         return new CursorLoader(this, Uri.parse(
-                "content://org.baobab.baolizer"), null, null, null,  null);
+                "content://org.baobab.baolizer"), null, where, null,  null);
     }
     
     @Override

@@ -1,5 +1,14 @@
 <resources>
 
-    <string name="app_name">Bolizaaa</string>
+    <string name="app_name">Baolizer</string>
+
+    <string name="leh">LEH (Lebensmittel)</string>
+    <string name="geh">GEH (Getränke)</string>
+    <string name="reseller">Großhandel</string>
+    <string name="multi">Multiplikator (Seminare/Workshops etc)</string>
+    <string name="gastro">Gastronomie</string>
+    <string name="doctor">Berater/Therapeut/Arzt</string>
+    <string name="webshop">Internethandel</string>
+    <string name="events">Veranstalter</string>
 
 </resources>

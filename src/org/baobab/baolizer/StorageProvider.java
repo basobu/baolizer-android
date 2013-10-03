@@ -137,10 +137,11 @@ public class StorageProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
             String[] selectionArgs, String sortOrder) {
+        System.out.println(selection);
         Cursor results = db.getReadableDatabase().query("baobabs",
-                null, null, null, null, null, null);
+                null, selection, null, null, null, null);
         results.setNotificationUri(getContext().getContentResolver(), uri);
-        return results; 
+        return results;
     }
 
     @Override
@@ -149,11 +150,10 @@ public class StorageProvider extends ContentProvider {
         // TODO Auto-generated method stub
         return 0;
     }
-    
+
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         // TODO Auto-generated method stub
         return 0;
     }
-
 }
