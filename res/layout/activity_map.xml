@@ -32,48 +32,56 @@
 
             <CheckBox
                 android:id="@+id/leh"
+                android:checked="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/leh" />
 
             <CheckBox
                 android:id="@+id/geh"
+                android:checked="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/geh" />
 
             <CheckBox 
                 android:id="@+id/reseller"
+                android:checked="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/reseller" />
 
             <CheckBox 
                 android:id="@+id/multi"
+                android:checked="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/multi" />
 
             <CheckBox 
                 android:id="@+id/gastro"
+                android:checked="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/gastro" />
 
             <CheckBox 
                 android:id="@+id/doctor"
+                android:checked="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/doctor" />
 
             <CheckBox 
                 android:id="@+id/webshop"
+                android:checked="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/webshop" />
 
             <CheckBox 
                 android:id="@+id/events"
+                android:checked="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/events" />
