@@ -1,9 +1,11 @@
-### [Baolizer Android App](http://baola.de.de)
+# Plant [baobab trees](http://baobab.org) all over the world!
 ![qr code](http://chart.apis.google.com/chart?chs=200x200&cht=qr&chld=|1&chl=bit.ly%2FGzFqBp)
 
-## [bit.ly/GzFqBp](bit.ly/GzFqBp)
+Download Baolizer Android App
+## [bit.ly/GzFqBp](http://bit.ly/GzFqBp)
 
-    
+
+ 
     Copyright (C) 2013 by it's authors. Some rights reserved. See LICENSE
 
     This program is free software: you can redistribute it and/or modify
@@ -19,4 +21,4 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-graphics artwork (C) Max licensed [cc-nc-sa]
+graphics / artwork Copyright (C) 2013 by Max Strasser. licensed [cc-nc-sa]
