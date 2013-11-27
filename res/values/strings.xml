@@ -2,11 +2,14 @@
 
     <string name="app_name">Baolizer</string>
 
-    <string name="leh">LEH (Lebensmittel)</string>
-    <string name="geh">GEH (Getränke)</string>
+    <string name="leh">Lebensmittelhandel</string>
+    <string name="geh">Getränkehandel</string>
     <string name="reseller">Großhandel</string>
-    <string name="multi">Multiplikator (Seminare/Workshops etc)</string>
+    <string name="multi">Multiplikator/Seminare/Workshops</string>
     <string name="gastro">Gastronomie</string>
+    <string name="wellness">Kosmetik/Wellness</string>
+    <string name="reformhaus">Reformhaus</string>
+    <string name="hersteller">Hersteller</string>
     <string name="doctor">Berater/Therapeut/Arzt</string>
     <string name="webshop">Internethandel</string>
     <string name="events">Veranstalter</string>
