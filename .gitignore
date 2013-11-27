@@ -1,7 +1,11 @@
 bin
 gen
 build
+gradle
+.idea
+.gradle
 .project
 .settings
 .classpath
-project.properties
+baolizer.iml
+local.properties

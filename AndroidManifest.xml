@@ -1,15 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.baobab.baolizer"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0" xmlns:tools="http://schemas.android.com/tools">
 
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="18" />
 
-    <uses-feature
-        android:glEsVersion="0x00020000"
-        android:required="true" />
+    <uses-feature android:glEsVersion="0x00020000" />
 
     <permission
         android:name="org.baobab.baolizer.permission.MAPS_RECEIVE"
@@ -29,12 +27,12 @@
         android:theme="@style/AppTheme" >
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyCXS3IlhMnXXHZ7Ppgj_oWbqhA0Sva3XhY" />
+            android:value="AIzaSyCDIrJ_cz784bB-YRBJbHh3DJ1IgNry8JY" />
 
         <activity
             android:name="org.baobab.baolizer.MapActivity"
             android:icon="@drawable/ic_launcher"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -58,7 +56,8 @@
         <provider
             android:exported="true"
             android:name=".StorageProvider"
-            android:authorities="org.baobab.baolizer" >
+            android:authorities="org.baobab.baolizer"
+            tools:ignore="ExportedContentProvider" >
         </provider>
         <service android:name="RefreshService"></service>
 
