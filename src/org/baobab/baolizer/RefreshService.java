@@ -26,8 +26,9 @@ import android.widget.Toast;
 
 public class RefreshService extends IntentService {
 
-    public static final String URL =
-            "http://baoliza.baobab.org/public/items.json";
+    public static final String BASE_URL =
+            "http://baolizer.baobab.org/public/";
+    public static final String URL = BASE_URL + "items.json";
     private static final String TYP = "typ";
     private static final String KOMMA = ",";
     private static final String LATLON = "latlon";
@@ -37,7 +38,7 @@ public class RefreshService extends IntentService {
     private static final String ZIP = "zip-codepost-code";
     private static final String NAME = "company-or-organisation";
     private static final String TAG = "Service";
-    private static final long REFRESH_INTERVALL = 60000;
+    private static final long REFRESH_INTERVALL = 600;
     private static final String LAST_REFRESH = "last_refresh";
     private static final String SUCCESS = "..baobabs refreshed";
 
@@ -60,13 +61,14 @@ public class RefreshService extends IntentService {
             JSONObject json = get(URL);
             if (json == null) return;
             json = json.getJSONObject("items");
-            ArrayList<ContentValues> items = new ArrayList<ContentValues>(500);
+            ArrayList<ContentValues> items = new ArrayList<ContentValues>(200);
             Iterator<String> iterator = json.keys();
             JSONObject item;
             String podio_id;
             String val;
             while (iterator.hasNext()) {
                 podio_id = iterator.next();
+                Log.d(TAG, "id  " + podio_id);
                 item = json.getJSONObject(podio_id);
                 ContentValues values = new ContentValues();
                 val = get(item, LATLON);
@@ -93,15 +95,13 @@ public class RefreshService extends IntentService {
                 JSONArray types = item.getJSONArray(TYP);
                 StringBuffer buffer = new StringBuffer();
                 for (int i = 0; i < types.length(); i++) {
-                    buffer.append(types
-                            .getJSONObject(i)
-                            .getString(VALUE))
-                        .append(KOMMA);
+                    buffer.append(types.getString(i)).append(KOMMA);
                 }
                 values.put(Baobab.TYPES, buffer.toString());
                 items.add(values);
+                Log.d(TAG, " + " + values);
             }
-            Log.d(TAG, "baobabs: " + items.size());
+            Log.d(TAG, "done " + items.size());
             getContentResolver().bulkInsert(Uri.parse(
                     "content://org.baobab.baolizer"),
                     items.toArray(new ContentValues[items.size()]));
@@ -118,8 +118,7 @@ public class RefreshService extends IntentService {
         JSONArray annoyingExtraArray = item.getJSONArray(key);
         if (annoyingExtraArray.length() > 0)
             return annoyingExtraArray
-                    .getJSONObject(0)
-                    .getString(VALUE);
+                    .getString(0);
         else return null;
     }
 
