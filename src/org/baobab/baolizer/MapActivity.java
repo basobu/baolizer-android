@@ -11,10 +11,13 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
+import android.widget.SlidingDrawer;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -149,4 +152,15 @@ public class MapActivity  extends FragmentActivity implements
                 Uri.parse("http://baolizer.baobab.org/submit")));
     }
 
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            SlidingDrawer drawer = (SlidingDrawer) findViewById(R.id.drawer);
+            if (drawer.isOpened()) {
+                drawer.close();
+                return true;
+            }
+        }
+        return super.onKeyUp(keyCode, event);
+    }
 }
