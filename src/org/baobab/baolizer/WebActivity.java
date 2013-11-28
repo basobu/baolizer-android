@@ -88,8 +88,8 @@ public class WebActivity extends Activity {
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (webView.canGoBack()) {
-                webView.goBack();
-                return true;
+                //webView.goBack();
+                //return true;
             }
         }
         return super.onKeyUp(keyCode, event);

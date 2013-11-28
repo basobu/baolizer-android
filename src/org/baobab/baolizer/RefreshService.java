@@ -33,7 +33,6 @@ public class RefreshService extends IntentService {
     private static final String KOMMA = ",";
     private static final String LATLON = "latlon";
     private static final String STREET = "street-address";
-    private static final String VALUE = "value";
     private static final String CITY = "city";
     private static final String ZIP = "zip-codepost-code";
     private static final String NAME = "company-or-organisation";
@@ -68,7 +67,6 @@ public class RefreshService extends IntentService {
             String val;
             while (iterator.hasNext()) {
                 podio_id = iterator.next();
-                Log.d(TAG, "id  " + podio_id);
                 item = json.getJSONObject(podio_id);
                 ContentValues values = new ContentValues();
                 val = get(item, LATLON);
