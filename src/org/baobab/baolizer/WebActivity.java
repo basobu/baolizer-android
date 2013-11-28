@@ -12,7 +12,9 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -60,11 +62,21 @@ public class WebActivity extends Activity {
                 }
                 super.onPageStarted(v, url, favic);
             }
+
             @Override
             public void onPageFinished(WebView view, String url) {
                 Log.d(TAG, "finished");
                 progress.dismiss();
                 super.onPageFinished(view, url);
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if (url.startsWith("tel:")) {
+                    startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse(url)));
+                    return true;
+                }
+                return super.shouldOverrideUrlLoading(view, url);
             }
         });
         webView.loadUrl(getIntent().getDataString());
