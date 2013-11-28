@@ -22,7 +22,6 @@ import android.widget.SlidingDrawer;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -37,8 +36,11 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class MapActivity  extends FragmentActivity implements
-        LoaderCallbacks<Cursor>, OnInfoWindowClickListener,
-        OnMapClickListener, OnCheckedChangeListener, View.OnClickListener {
+        View.OnClickListener,
+        LoaderCallbacks<Cursor>,
+        OnCheckedChangeListener,
+        OnInfoWindowClickListener,
+        GoogleMap.OnMapLongClickListener {
 
     private static final String PAGE_HTML = ".page.html";
     private static final String TAG = "Baolizer";
@@ -59,7 +61,7 @@ public class MapActivity  extends FragmentActivity implements
         map.animateCamera(CameraUpdateFactory
                 .newCameraPosition(new CameraPosition(
                         new LatLng(48.138790, 11.553338), 12, 90, 0)));
-        map.setOnMapClickListener(this);
+        map.setOnMapLongClickListener(this);
         map.setOnInfoWindowClickListener(this);
         types = (LinearLayout) findViewById(R.id.types);
         for (int i = 0; i < types.getChildCount(); i++) {
@@ -131,7 +133,7 @@ public class MapActivity  extends FragmentActivity implements
     }
 
     @Override
-    public void onMapClick(LatLng position) {
+    public void onMapLongClick(LatLng position) {
         Crouton.makeText(this, "Planted new Baobab Seed!", Style.INFO).show();
         map.addMarker(new MarkerOptions()
                 .position(position)
