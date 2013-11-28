@@ -10,6 +10,13 @@
         android:layout_height="match_parent"
         class="com.google.android.gms.maps.SupportMapFragment" />
 
+    <ImageButton
+      android:id="@+id/seed"
+      android:layout_height="wrap_content"
+      android:layout_width="wrap_content"
+      android:background="@drawable/btn_bg"
+      android:src="@drawable/samen_setzen" />
+
     <SlidingDrawer
         android:orientation="horizontal"
         android:layout_width="match_parent"
