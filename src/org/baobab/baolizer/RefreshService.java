@@ -37,7 +37,7 @@ public class RefreshService extends IntentService {
     private static final String ZIP = "zip-codepost-code";
     private static final String NAME = "company-or-organisation";
     private static final String TAG = "Service";
-    private static final long REFRESH_INTERVALL = 600;
+    private static final long REFRESH_INTERVALL = 7*24*3600*1000;
     private static final String LAST_REFRESH = "last_refresh";
     private static final String SUCCESS = "..baobabs refreshed";
 
