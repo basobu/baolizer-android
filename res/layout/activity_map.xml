@@ -1,126 +1,127 @@
 <FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/frame"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/frame"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent" >
+
+  <fragment
+    android:id="@+id/map"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    class="com.google.android.gms.maps.SupportMapFragment" />
 
-    <fragment
-        android:id="@+id/map"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        class="com.google.android.gms.maps.SupportMapFragment" />
+  <ImageButton
+    android:id="@+id/seed"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:background="@drawable/btn_bg"
+    android:src="@drawable/samen_setzen" />
 
-    <ImageButton
-      android:id="@+id/seed"
-      android:layout_height="wrap_content"
+  <SlidingDrawer
+    android:id="@+id/drawer"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:content="@+id/content"
+    android:handle="@+id/handle" >
+
+    <Button
+      android:id="@+id/handle"
       android:layout_width="wrap_content"
-      android:background="@drawable/btn_bg"
-      android:src="@drawable/samen_setzen" />
+      android:layout_height="wrap_content" />
 
-    <SlidingDrawer
-        android:orientation="horizontal"
+    <ScrollView
+      android:id="@+id/content"
+      android:layout_height="match_parent"
+      android:layout_width="match_parent" >
+
+      <LinearLayout
+        android:id="@+id/types"
+        android:padding="21dp"
+        android:orientation="vertical"
+        android:background="@color/black"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:content="@+id/content"
-        android:handle="@+id/handle" >
+        android:layout_height="wrap_content" >
 
-        <Button
-            android:id="@+id/handle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        <CheckBox
+          android:id="@+id/leh"
+          android:checked="true"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/leh" />
 
-        <ScrollView
-            android:id="@+id/content"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent" >
+        <CheckBox
+          android:id="@+id/geh"
+          android:checked="true"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/geh" />
 
-        <LinearLayout
-            android:id="@+id/types"
-            android:padding="21dp"
-            android:orientation="vertical"
-            android:background="@color/black"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+        <CheckBox
+          android:id="@+id/reseller"
+          android:checked="true"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/reseller" />
 
-          <CheckBox
-            android:id="@+id/leh"
-            android:checked="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/leh" />
+        <CheckBox
+          android:id="@+id/reformhaus"
+          android:checked="true"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/reformhaus" />
 
-          <CheckBox
-            android:id="@+id/geh"
-            android:checked="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/geh" />
+        <CheckBox
+          android:id="@+id/gastro"
+          android:checked="true"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/gastro" />
 
-          <CheckBox
-            android:id="@+id/reseller"
-            android:checked="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/reseller" />
+        <CheckBox
+          android:id="@+id/webshop"
+          android:checked="true"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/webshop" />
 
-          <CheckBox
-            android:id="@+id/reformhaus"
-            android:checked="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/reformhaus" />
+        <CheckBox
+          android:id="@+id/hersteller"
+          android:checked="true"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/hersteller" />
 
-          <CheckBox
-            android:id="@+id/gastro"
-            android:checked="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/gastro" />
+        <CheckBox
+          android:id="@+id/doctor"
+          android:checked="true"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/doctor" />
 
-          <CheckBox
-            android:id="@+id/webshop"
-            android:checked="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/webshop" />
+        <CheckBox
+          android:id="@+id/wellness"
+          android:checked="true"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/wellness" />
 
-          <CheckBox
-            android:id="@+id/hersteller"
-            android:checked="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/hersteller" />
+        <CheckBox
+          android:id="@+id/events"
+          android:checked="true"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/events" />
 
-          <CheckBox
-            android:id="@+id/doctor"
-            android:checked="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/doctor" />
+        <CheckBox
+          android:id="@+id/multi"
+          android:checked="true"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/multi" />
 
-          <CheckBox
-            android:id="@+id/wellness"
-            android:checked="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/wellness" />
-
-          <CheckBox
-            android:id="@+id/events"
-            android:checked="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/events" />
-
-          <CheckBox
-            android:id="@+id/multi"
-            android:checked="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/multi" />
-
-        </LinearLayout>
-        </ScrollView>
-    </SlidingDrawer>
+      </LinearLayout>
+    </ScrollView>
+  </SlidingDrawer>
 
 </FrameLayout>
