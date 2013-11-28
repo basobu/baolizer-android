@@ -1,8 +1,6 @@
 
 package org.baobab.baolizer;
 
-import java.util.HashMap;
-
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
@@ -17,7 +15,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
-import ch.hsr.geohash.GeoHash;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -30,6 +27,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.HashMap;
+
+import ch.hsr.geohash.GeoHash;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
@@ -37,7 +37,9 @@ public class MapActivity  extends FragmentActivity implements
         LoaderCallbacks<Cursor>, OnInfoWindowClickListener,
         OnMapClickListener, OnCheckedChangeListener {
 
+    private static final String PAGE_HTML = ".page.html";
     private static final String TAG = "Baolizer";
+    public static final String WEBVIEW = "webview/";
     private HashMap<String, String> podioId;
     private GoogleMap map;
     private LinearLayout types;
@@ -67,6 +69,14 @@ public class MapActivity  extends FragmentActivity implements
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         getSupportLoaderManager().restartLoader(0, null, this);
     }
+
+    ContentObserver onChange = new ContentObserver(null) {
+
+        @Override
+        public void onChange(boolean selfChange) {
+            getSupportLoaderManager().restartLoader(0, null, MapActivity.this);
+        }
+    };
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
@@ -106,19 +116,13 @@ public class MapActivity  extends FragmentActivity implements
         cursor.registerContentObserver(onChange);
     }
 
-    ContentObserver onChange = new ContentObserver(null) {
-
-        @Override
-        public void onChange(boolean selfChange) {
-            getSupportLoaderManager().restartLoader(0, null, MapActivity.this);
-        }
-    };
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-//        Log.d(TAG, "browse " + SyncService.URL + marker.getSnippet());
-        startActivity(new Intent(this, WebActivity.class)
-        .setData(Uri.parse(RefreshService.URL + marker.getSnippet())));
+        Uri url = Uri.parse(RefreshService.BASE_URL + WEBVIEW +
+                podioId.get(marker.getId()) + PAGE_HTML);
+        System.out.println("clicked " + url);
+        startActivity(new Intent(this, WebActivity.class).setData(url));
     }
 
     @Override
@@ -133,5 +137,7 @@ public class MapActivity  extends FragmentActivity implements
 
     @Override
     public void onLoaderReset(Loader<Cursor> l) {
+        System.out.println("loader reset");
+        map.clear();
     }
 }
