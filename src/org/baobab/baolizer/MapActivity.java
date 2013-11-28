@@ -57,7 +57,7 @@ public class MapActivity  extends FragmentActivity implements
                         new LatLng(48.138790, 11.553338), 12, 90, 0)));
         map.setOnMapClickListener(this);
         map.setOnInfoWindowClickListener(this);
-        types = (LinearLayout) findViewById(R.id.content);
+        types = (LinearLayout) findViewById(R.id.types);
         for (int i = 0; i < types.getChildCount(); i++) {
             ((CheckBox) types.getChildAt(i)).setOnCheckedChangeListener(this);
         }
