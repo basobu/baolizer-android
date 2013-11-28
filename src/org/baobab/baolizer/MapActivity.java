@@ -35,11 +35,12 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class MapActivity  extends FragmentActivity implements
         LoaderCallbacks<Cursor>, OnInfoWindowClickListener,
-        OnMapClickListener, OnCheckedChangeListener {
+        OnMapClickListener, OnCheckedChangeListener, View.OnClickListener {
 
     private static final String PAGE_HTML = ".page.html";
     private static final String TAG = "Baolizer";
     public static final String WEBVIEW = "webview/";
+    public static final String SUBMIT = "submit/";
     private HashMap<String, String> podioId;
     private GoogleMap map;
     private LinearLayout types;
@@ -61,6 +62,7 @@ public class MapActivity  extends FragmentActivity implements
         for (int i = 0; i < types.getChildCount(); i++) {
             ((CheckBox) types.getChildAt(i)).setOnCheckedChangeListener(this);
         }
+        findViewById(R.id.seed).setOnClickListener(this);
         getSupportLoaderManager().initLoader(0, null, this);
         startService(new Intent(this, RefreshService.class));
     }
@@ -140,4 +142,11 @@ public class MapActivity  extends FragmentActivity implements
         System.out.println("loader reset");
         map.clear();
     }
+
+    @Override
+    public void onClick(View v) {
+        startActivity(new Intent(this, WebActivity.class).setData(
+                Uri.parse("http://baolizer.baobab.org/submit")));
+    }
+
 }
