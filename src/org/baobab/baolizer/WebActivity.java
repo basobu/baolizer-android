@@ -1,14 +1,5 @@
-/**
- * Fahrgemeinschaft / Ridesharing App
- * Copyright (c) 2013 by it's authors.
- * Some rights reserved. See LICENSE.. 
- *
- */
-
 package org.baobab.baolizer;
 
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -24,13 +15,17 @@ import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 
 @SuppressLint("SetJavaScriptEnabled")
 public class WebActivity extends Activity {
 
-    private static final String TAG = "Fahrgemeinschaft";
-    private ProgressDialog progress;
+    private static final String TAG = "WebActivity";
+    private ProgressBar progress;
     private WebView webView;
 
     @Override
@@ -55,9 +50,7 @@ public class WebActivity extends Activity {
             
             @Override
             public void onPageStarted(WebView v, String url, Bitmap favic) {
-                Log.d(TAG, "url");
                 if (url.startsWith("http")) {
-                    Log.d(TAG, "url http");
                     progress.show();
                 }
                 super.onPageStarted(v, url, favic);
@@ -65,7 +58,6 @@ public class WebActivity extends Activity {
 
             @Override
             public void onPageFinished(WebView view, String url) {
-                Log.d(TAG, "finished");
                 progress.dismiss();
                 super.onPageFinished(view, url);
             }
