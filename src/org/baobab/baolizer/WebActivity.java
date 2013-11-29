@@ -67,7 +67,7 @@ public class WebActivity extends Activity {
                 if (url.startsWith("tel:")) {
                     startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse(url)));
                     return true;
-                }
+                } else if (url.equals("http://baolizer.baobab.org/")) finish();
                 return super.shouldOverrideUrlLoading(view, url);
             }
         });
