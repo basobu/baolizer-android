@@ -7,5 +7,5 @@ gradle
 .project
 .settings
 .classpath
-baolizer.iml
+*.iml
 local.properties
