@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebViewFragment;
 import android.widget.AdapterView;
@@ -33,6 +34,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SlidingDrawer;
+import android.widget.SpinnerAdapter;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -54,8 +56,7 @@ public class MapActivity  extends ActionBarActivity implements
         View.OnClickListener,
         LoaderCallbacks<Cursor>,
         OnCheckedChangeListener,
-        OnInfoWindowClickListener,
-        GoogleMap.OnMapLongClickListener {
+        OnInfoWindowClickListener {
 
     // < TSC
     private String[] mMenuTitles;
@@ -100,6 +101,9 @@ public class MapActivity  extends ActionBarActivity implements
 
 
         // TODO: Drawer toggle don't work!!??
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
                 mDrawerLayout,         /* DrawerLayout object */
@@ -122,6 +126,8 @@ public class MapActivity  extends ActionBarActivity implements
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
+        // Filter Dropdown
+        // TODO
 
 
 
@@ -135,15 +141,38 @@ public class MapActivity  extends ActionBarActivity implements
         map.animateCamera(CameraUpdateFactory
                 .newCameraPosition(new CameraPosition(
                         new LatLng(48.138790, 11.553338), 12, 90, 0)));
-        map.setOnMapLongClickListener(this);
         map.setOnInfoWindowClickListener(this);
         types = (LinearLayout) findViewById(R.id.types);
         for (int i = 0; i < types.getChildCount(); i++) {
             ((CheckBox) types.getChildAt(i)).setOnCheckedChangeListener(this);
         }
-        findViewById(R.id.seed).setOnClickListener(this);
+        //findViewById(R.id.seed).setOnClickListener(this);
         getSupportLoaderManager().initLoader(0, null, this);
         startService(new Intent(this, RefreshService.class));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Pass the event to ActionBarDrawerToggle, if it returns
+        // true, then it has handled the app icon touch event
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        // Handle your other action bar items...
+
+        switch (item.getItemId()) {
+            case R.id.action_filter:
+                SlidingDrawer drawer = (SlidingDrawer) findViewById(R.id.drawer);
+                if (drawer.isOpened()) {
+                    drawer.animateClose();
+                } else {
+                    drawer.animateOpen();
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
     }
 
     @Override
@@ -218,7 +247,7 @@ public class MapActivity  extends ActionBarActivity implements
             Marker marker = map.addMarker(
                         new MarkerOptions()
                     .title(cursor.getString(3))
-                    .snippet(cursor.getString(6))
+                    .snippet(cursor.getString(1))
                     .icon(BitmapDescriptorFactory
                             .fromResource(R.drawable.tree))
                     .position(new LatLng(
@@ -238,15 +267,6 @@ public class MapActivity  extends ActionBarActivity implements
         startActivity(new Intent(this, WebActivity.class).setData(url));
     }
 
-    @Override
-    public void onMapLongClick(LatLng position) {
-        Crouton.makeText(this, "Planted new Baobab Seed!", Style.INFO).show();
-        map.addMarker(new MarkerOptions()
-                .position(position)
-                .icon(BitmapDescriptorFactory
-                        .fromResource(R.drawable.seedling))
-                .draggable(true));
-    }
 
     @Override
     public void onLoaderReset(Loader<Cursor> l) {

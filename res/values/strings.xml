@@ -14,7 +14,6 @@
     <string name="webshop">Internethandel</string>
     <string name="events">Veranstalter</string>
 
-
     <string-array name="menu">
         <item>Karte</item>
         <item>Neuen Ort vorschlagen</item>

@@ -16,12 +16,12 @@
     android:layout_height="match_parent"
     class="com.google.android.gms.maps.SupportMapFragment" />
 
-  <ImageButton
+  <!--<ImageButton
     android:id="@+id/seed"
     android:layout_height="wrap_content"
     android:layout_width="wrap_content"
     android:background="@drawable/btn_bg"
-    android:src="@drawable/samen_setzen" />
+    android:src="@drawable/samen_setzen" />-->
 
   <SlidingDrawer
     android:id="@+id/drawer"
@@ -31,13 +31,15 @@
     android:content="@+id/content"
     android:handle="@+id/handle" >
 
-    <Button
-      android:id="@+id/handle"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content" />
+      <ImageButton
+          android:id="@+id/handle"
+          android:layout_height="0dp"
+          android:layout_width="0dp"
+          android:src="@drawable/ic_action_filter" />
 
     <ScrollView
       android:id="@+id/content"
+      android:background="@color/black"
       android:layout_height="match_parent"
       android:layout_width="match_parent" >
 
@@ -45,18 +47,17 @@
         android:id="@+id/types"
         android:padding="21dp"
         android:orientation="vertical"
-        android:background="@color/black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <CheckBox
-          android:id="@+id/leh"
-          android:checked="true"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/leh" />
+          <CheckBox
+            android:id="@+id/leh"
+            android:checked="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/leh" />
 
-        <CheckBox
+          <CheckBox
           android:id="@+id/geh"
           android:checked="true"
           android:layout_width="wrap_content"
