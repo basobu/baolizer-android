@@ -14,4 +14,15 @@
     <string name="webshop">Internethandel</string>
     <string name="events">Veranstalter</string>
 
+
+    <string-array name="menu">
+        <item>Karte</item>
+        <item>Neuen Ort vorschlagen</item>
+        <item>Impressum</item>
+    </string-array>
+
+    <string name="drawer_open">Öffnen</string>
+    <string name="drawer_close">Schliessen</string>
+    <string name="action_filter">Filter</string>
+
 </resources>

@@ -31,8 +31,7 @@
 
         <activity
             android:name="org.baobab.baolizer.MapActivity"
-            android:icon="@drawable/ic_launcher"
-            android:theme="@android:style/Theme.Black.NoTitleBar" >
+            android:icon="@drawable/ic_launcher" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
