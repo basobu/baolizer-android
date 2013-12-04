@@ -35,6 +35,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SlidingDrawer;
 import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -46,7 +47,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import ch.hsr.geohash.GeoHash;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
@@ -56,7 +61,8 @@ public class MapActivity  extends ActionBarActivity implements
         View.OnClickListener,
         LoaderCallbacks<Cursor>,
         OnCheckedChangeListener,
-        OnInfoWindowClickListener {
+        OnInfoWindowClickListener,
+        ListView.OnItemClickListener {
 
     // < TSC
     private String[] mMenuTitles;
@@ -65,6 +71,8 @@ public class MapActivity  extends ActionBarActivity implements
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
+
+    private ListView filterView;
 
     // > TSC
 
@@ -128,7 +136,7 @@ public class MapActivity  extends ActionBarActivity implements
 
         // Filter Dropdown
         // TODO
-
+        filterView = (ListView) findViewById(R.id.filterList);
 
 
         // > tsc
@@ -142,10 +150,10 @@ public class MapActivity  extends ActionBarActivity implements
                 .newCameraPosition(new CameraPosition(
                         new LatLng(48.138790, 11.553338), 12, 90, 0)));
         map.setOnInfoWindowClickListener(this);
-        types = (LinearLayout) findViewById(R.id.types);
+        /*types = (LinearLayout) findViewById(R.id.types);
         for (int i = 0; i < types.getChildCount(); i++) {
             ((CheckBox) types.getChildAt(i)).setOnCheckedChangeListener(this);
-        }
+        }*/
         //findViewById(R.id.seed).setOnClickListener(this);
         getSupportLoaderManager().initLoader(0, null, this);
         startService(new Intent(this, RefreshService.class));
@@ -188,6 +196,7 @@ public class MapActivity  extends ActionBarActivity implements
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             selectItem(position);
+
         }
     }
 
@@ -216,19 +225,31 @@ public class MapActivity  extends ActionBarActivity implements
 
         @Override
         public void onChange(boolean selfChange) {
-            getSupportLoaderManager().restartLoader(0, null, MapActivity.this);
+          getSupportLoaderManager().restartLoader(0, null, MapActivity.this);
         }
     };
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
         String where = "types IS 'none'";
-        for (int i = 0; i < types.getChildCount(); i++) {
+        //String where = "types IS NOT 'none'";
+        /*for (int i = 0; i < types.getChildCount(); i++) {
             CheckBox typ = (CheckBox) types.getChildAt(i);
             if (typ.isChecked()) {
                 where += " OR types LIKE '%" + typ.getText() + "%'";
             }
+        }*/
+
+        if (arg1 != null && (String)filterView.getItemAtPosition(arg1.getInt("position", 1)) != " Alle" ) {
+
+
+
+            Log.d(TAG, "filter type: " + (String)filterView.getItemAtPosition(arg1.getInt("position", 1)));
+            where += " OR types LIKE '%" + (String)filterView.getItemAtPosition(arg1.getInt("position", 1)) + "%'";
+        } else {
+            where += " OR types IS NOT 'none'";
         }
+
         return new CursorLoader(this, Uri.parse(
                 "content://org.baobab.baolizer"), null, where, null,  null);
     }
@@ -240,6 +261,9 @@ public class MapActivity  extends ActionBarActivity implements
         map.clear();
         cursor.moveToFirst();
         podioId = new HashMap<String, String>();
+
+        ArrayList<String> filter_array = new ArrayList<String>(); // TSC
+
         while (!cursor.isLast()) {
             cursor.moveToNext();
             GeoHash geohash = GeoHash
@@ -253,10 +277,48 @@ public class MapActivity  extends ActionBarActivity implements
                     .position(new LatLng(
                            geohash.getPoint().getLatitude(),
                            geohash.getPoint().getLongitude())));
+
+            filter_array.addAll(Arrays.asList(cursor.getString(1).split(","))); // TSC
             podioId.put(marker.getId(), cursor.getString(8));
         }
+
+        // < TSC: Generate FitlerView from loaded data
+        if(filterView.getAdapter() == null) {
+            filter_array = new ArrayList<String>(new HashSet<String>(filter_array));
+
+            Collections.sort(filter_array);
+            filter_array.set(filter_array.indexOf(""), " Alle");
+            filterView.setAdapter(new ArrayAdapter<String>(this,
+                    R.layout.filter_list_item, filter_array));
+
+
+            filterView.setOnItemClickListener(this);
+
+
+        }
+                // > TSC
+
         cursor.registerContentObserver(onChange);
     }
+
+    /* The click listner for ListView in the navigation drawer */
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        Log.d(TAG, "filter position: " + position);
+
+        filterView.setItemChecked(position, true);
+        SlidingDrawer drawer = (SlidingDrawer) findViewById(R.id.drawer);
+        drawer.animateClose();
+
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("position", position);
+
+        getSupportLoaderManager().restartLoader(0, bundle, this);
+    }
+
 
 
     @Override

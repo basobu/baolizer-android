@@ -1,9 +1,10 @@
 <FrameLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/frame"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content"
-  android:background="@android:color/white" >
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:background="@android:color/white"
+    android:padding="10dp">
 
   <ImageView
     android:id="@+id/progress"
@@ -17,7 +18,7 @@
     android:id="@+id/webview"
     android:minWidth="198dp"
     android:minHeight="123dp"
-    android:layout_height="wrap_content"
-    android:layout_width="wrap_content" />
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent" />
 
 </FrameLayout>
