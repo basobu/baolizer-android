@@ -84,6 +84,8 @@ public class MapActivity  extends ActionBarActivity implements
     private GoogleMap map;
     private LinearLayout types;
 
+    private MyMapFragment mapFragment;
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -139,6 +141,8 @@ public class MapActivity  extends ActionBarActivity implements
         filterView = (ListView) findViewById(R.id.filterList);
 
 
+
+        //mapFragment = new MyMapFragment();
         // > tsc
 
 
@@ -200,14 +204,43 @@ public class MapActivity  extends ActionBarActivity implements
         }
     }
 
+
+    // Drawer onItemClick
     private void selectItem(int position) {
-        // update the map_menu content by replacing fragments
+
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        switch (position) {
+            case 0:
+                if (mapFragment == null || !mapFragment.isAdded())
+                    mapFragment = new MyMapFragment();
+
+                fragmentManager.beginTransaction().replace(R.id.frame, mapFragment).commit();
+                //fragmentManager.beginTransaction().attach(mapFragment).commit();
+                break;
+            case 1:
+            case 2:
+                MyWebViewFragment fragment = new MyWebViewFragment();
+                Bundle args = new Bundle();
+                args.putInt("position", position);
+                args.putString("url", "http://map.baobab.org/submit/");
+                fragment.setArguments(args);
+                fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
+
+
+                break;
+
+        }
+
+
 
 
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
         setTitle(mMenuTitles[position]);
         mDrawerLayout.closeDrawer(mDrawerList);
+
+
     }
 
     @Override
@@ -301,7 +334,6 @@ public class MapActivity  extends ActionBarActivity implements
         cursor.registerContentObserver(onChange);
     }
 
-    /* The click listner for ListView in the navigation drawer */
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
