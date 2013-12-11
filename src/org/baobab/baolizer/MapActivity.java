@@ -1,8 +1,6 @@
 
 package org.baobab.baolizer;
 
-import android.app.Fragment;
-
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
@@ -10,13 +8,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 
 import android.util.Log;
@@ -25,17 +21,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebViewFragment;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SlidingDrawer;
-import android.widget.SpinnerAdapter;
-import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -54,8 +46,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import ch.hsr.geohash.GeoHash;
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class MapActivity  extends ActionBarActivity implements
         View.OnClickListener,
@@ -220,7 +210,7 @@ public class MapActivity  extends ActionBarActivity implements
                 break;
             case 1:
             case 2:
-                MyWebViewFragment fragment = new MyWebViewFragment();
+                WebFragment fragment = new WebFragment();
                 Bundle args = new Bundle();
                 args.putInt("position", position);
                 args.putString("url", "http://map.baobab.org/submit/");

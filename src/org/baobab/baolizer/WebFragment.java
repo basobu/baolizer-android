@@ -10,7 +10,7 @@ import android.webkit.WebView;
 /**
  * Created by tsc on 05.12.13.
  */
-public class MyWebViewFragment extends Fragment {
+public class WebFragment extends Fragment {
 
     private WebView webView;
     private Bundle webViewBundle;
