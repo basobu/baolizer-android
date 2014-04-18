@@ -9,7 +9,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.baobab.baolizer.StorageProvider.Baobab;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,6 +22,7 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
+
 
 public class RefreshService extends IntentService {
 
@@ -73,29 +73,25 @@ public class RefreshService extends IntentService {
                 if (val != null) {
                     String[] latlon = val.split(KOMMA);
                     if (latlon.length == 2) {
-                        values.put(Baobab.GEOHASH, GeoHash.withBitPrecision(
+                        values.put(StorageProvider.Baobab.GEOHASH, GeoHash.withBitPrecision(
                                 Double.parseDouble(latlon[0]),
                                 Double.parseDouble(latlon[1]),
                                 55).toBase32());
                     } else Log.d(TAG, "strange latlon: " + val);
                 } else continue;
-                values.put(Baobab.PODIO_ID, podio_id);
+                values.put(StorageProvider.Baobab.PODIO_ID, podio_id);
                 val = get(item, NAME);
-                if (val != null) values.put(Baobab.NAME, val);
+                if (val != null) values.put(StorageProvider.Baobab.BABAB_ID, val);
                 val = get(item, "status");
-                if (val != null) values.put(Baobab.STATE, val);
+                if (val != null) values.put(StorageProvider.Baobab.STATE, val);
                 val = get(item, ZIP);
-                if (val != null) values.put(Baobab.ZIP, val);
+                if (val != null) values.put(StorageProvider.Baobab.ZIP, val);
                 val = get(item, CITY);
-                if (val != null) values.put(Baobab.CITY, val);
+                if (val != null) values.put(StorageProvider.Baobab.CITY, val);
                 val = get(item, STREET);
-                if (val != null) values.put(Baobab.STREET, val);
-                JSONArray types = item.getJSONArray(TYP);
-                StringBuffer buffer = new StringBuffer();
-                for (int i = 0; i < types.length(); i++) {
-                    buffer.append(types.getString(i)).append(KOMMA);
-                }
-                values.put(Baobab.TYPES, buffer.toString());
+                if (val != null) values.put(StorageProvider.Baobab.STREET, val);
+                val = get(item, TYP);
+                if (val != null) values.put(StorageProvider.Baobab.CATEGORIES, val);
                 items.add(values);
                 Log.d(TAG, " + " + values);
             }

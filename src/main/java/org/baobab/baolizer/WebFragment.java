@@ -7,9 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 
-/**
- * Created by tsc on 05.12.13.
- */
 public class WebFragment extends Fragment {
 
     private WebView webView;
@@ -17,15 +14,14 @@ public class WebFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inf, ViewGroup parent, Bundle savedInstanceState) {
 
 
         int position = getArguments().getInt("position");
 
         String url = getArguments().getString("url");
 
-        View v = inflater.inflate(R.layout.fragment_web, container, false);
+        View v = inf.inflate(R.layout.fragment_web, parent, false);
 
 
         webView = (WebView)v.findViewById(R.id.webView);
@@ -34,10 +30,12 @@ public class WebFragment extends Fragment {
         //webView.setWebViewClient(new WebViewClient());
 
 
-        if (webViewBundle == null) {
+        if (savedInstanceState == null) {
+            System.out.println("load");
             webView.loadUrl(url);
         } else {
-            webView.restoreState(webViewBundle);
+            System.out.println("restore");
+            webView.restoreState((Bundle) savedInstanceState.getParcelable("state"));
         }
 
 
@@ -45,10 +43,18 @@ public class WebFragment extends Fragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        System.out.println("save");
         webViewBundle = new Bundle();
         webView.saveState(webViewBundle);
+        outState.putParcelable("state", webViewBundle);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
     }
 
 

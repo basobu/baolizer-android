@@ -5,19 +5,23 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteDoneException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
 import android.util.Log;
 
+import org.json.JSONArray;
+
 public class StorageProvider extends ContentProvider {
 
     private static final String TAG = "PlaceProvider";
+    private SQLiteStatement getCategory;
 
     public class Baobab {
-        public static final String TYPES = "types";
+        public static final String CATEGORIES = "types";
         public static final String STATE = "state";
-        public static final String NAME = "name";
+        public static final String BABAB_ID = "name";
         public static final String ZIP = "zip";
         public static final String CITY = "city";
         public static final String STREET = "street";
@@ -37,14 +41,24 @@ public class StorageProvider extends ContentProvider {
         public void onCreate(SQLiteDatabase db) {
             db.execSQL("CREATE TABLE baobabs (" +
                             "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                            Baobab.TYPES + " TEXT, " +
+                            Baobab.CATEGORIES + " INTEGER, " +
                             Baobab.STATE + " TEXT, " +
-                            Baobab.NAME + " TEXT, " +
+                            Baobab.BABAB_ID + " TEXT, " +
                             Baobab.ZIP + " TEXT, " +
                             Baobab.CITY + " TEXT, " +
                             Baobab.STREET + " TEXT, " +
                             Baobab.GEOHASH + " TEXT, " +
                             Baobab.PODIO_ID + " TEXT " +
+                        ");");
+            db.execSQL("CREATE TABLE category_baobab (" +
+                            "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                            " category_id, " +
+                            " baobab_id" +
+                        ");");
+            Log.d(TAG, "created DB");
+            db.execSQL("CREATE TABLE categories (" +
+                            "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                            " name TEXT " +
                         ");");
             Log.d(TAG, "created DB");
         }
@@ -63,6 +77,7 @@ public class StorageProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         db = new DatabaseHelper(getContext());
+        getCategory = db.getReadableDatabase().compileStatement(GET_CATEGORY);
         return false;
     }
 
@@ -75,15 +90,14 @@ public class StorageProvider extends ContentProvider {
     static final String CLEAN_UP = "DELETE FROM baobabs";
 
     static final String INSERT_BAOBAB = "INSERT INTO baobabs (" +
-            Baobab.TYPES + ", " +
             Baobab.STATE + ", " +
-            Baobab.NAME + ", " +
+            Baobab.BABAB_ID + ", " +
             Baobab.ZIP + ", " +
             Baobab.CITY + ", " +
             Baobab.STREET + ", " +
             Baobab.GEOHASH + ", " +
             Baobab.PODIO_ID + ") " +
-            " VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+            " VALUES (?, ?, ?, ?, ?, ?, ?);";
 
     private void prepareInsertBaobab() {
         if (insert == null)
@@ -103,19 +117,24 @@ public class StorageProvider extends ContentProvider {
                 else continue;
                 if (baobab.containsKey(Baobab.PODIO_ID))
                     insert.bindString(8, baobab.getAsString(Baobab.PODIO_ID));
-                if (baobab.containsKey(Baobab.TYPES))
-                    insert.bindString(1, baobab.getAsString(Baobab.TYPES));
                 if (baobab.containsKey(Baobab.STATE))
                     insert.bindString(2, baobab.getAsString(Baobab.STATE));
-                if (baobab.containsKey(Baobab.NAME))
-                    insert.bindString(3, baobab.getAsString(Baobab.NAME));
+                if (baobab.containsKey(Baobab.BABAB_ID))
+                    insert.bindString(3, baobab.getAsString(Baobab.BABAB_ID));
                 if (baobab.containsKey(Baobab.ZIP))
                     insert.bindString(4, baobab.getAsString(Baobab.ZIP));
                 if (baobab.containsKey(Baobab.CITY))
                     insert.bindString(5, baobab.getAsString(Baobab.CITY));
                 if (baobab.containsKey(Baobab.STREET))
                     insert.bindString(6, baobab.getAsString(Baobab.STREET));
-                insert.executeInsert();
+                long id = insert.executeInsert();
+                if (baobab.containsKey(Baobab.CATEGORIES)) {
+                    JSONArray categories = new JSONArray(
+                            baobab.getAsString(Baobab.CATEGORIES));
+                    for (int j = 0; j < categories.length(); j++) {
+                        insertCategory(id, categories.getString(i));
+                    }
+                }
             }
             db.getWritableDatabase().setTransactionSuccessful();
         } catch (Exception e) {
@@ -126,6 +145,27 @@ public class StorageProvider extends ContentProvider {
             getContext().getContentResolver().notifyChange(uri, null);
         }
         return values.length;
+    }
+
+    static final String GET_CATEGORY = "SELECT _id " +
+            " FROM categories WHERE name = ?;";
+
+    private void insertCategory(long baobabId, String categoryName) {
+        ContentValues values = new ContentValues();
+        values.put("baobab_id", baobabId);
+        values.put("category_id", getCategoryId(categoryName));
+        db.getWritableDatabase().insert("category_baobab", null, values);
+    }
+
+    private long getCategoryId(String categoryName) {
+        try {
+            getCategory.bindString(1, categoryName);
+            return Long.parseLong(getCategory.simpleQueryForString());
+        } catch (SQLiteDoneException e) {
+            ContentValues category = new ContentValues();
+            category.put("name", categoryName);
+            return db.getWritableDatabase().insert("categories", null, category);
+        }
     }
 
     @Override

@@ -54,54 +54,33 @@ public class MapActivity  extends ActionBarActivity implements
         OnInfoWindowClickListener,
         ListView.OnItemClickListener {
 
-    // < TSC
-    private String[] mMenuTitles;
-    private CharSequence mDrawerTitle;
-    private CharSequence mTitle;
-    private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
+    private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
 
-    private ListView filterView;
-
-    // > TSC
-
-    private static final String PAGE_HTML = ".page.html";
-    private static final String TAG = "Baolizer";
-    public static final String WEBVIEW = "webview/";
-    public static final String SUBMIT = "submit/";
-    private HashMap<String, String> podioId;
     private GoogleMap map;
+    private MyMapFragment mapFragment;
+    private HashMap<String, String> podioId;
+    private static final String TAG = "Baolizer";
+    public static final String SUBMIT = "submit/";
+    public static final String WEBVIEW = "webview/";
+    private static final String PAGE_HTML = ".page.html";
+
     private LinearLayout types;
 
-    private MyMapFragment mapFragment;
-
-    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-
-
-        // < tsc
-        mTitle = mDrawerTitle = getTitle();
-        mMenuTitles = getResources().getStringArray(R.array.menu);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-
-        // Set the adapter for the list view
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, mMenuTitles));
-        // Set the list's click listener
+                R.layout.drawer_list_item,
+                getResources().getStringArray(R.array.menu)));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-
-
-
-
         // TODO: Drawer toggle don't work!!??
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         mDrawerToggle = new ActionBarDrawerToggle(
@@ -114,27 +93,15 @@ public class MapActivity  extends ActionBarActivity implements
 
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
-                getSupportActionBar().setTitle(mTitle);
+                System.out.println("close");
             }
 
             /** Called when a drawer has settled in a completely open state. */
             public void onDrawerOpened(View drawerView) {
-                getSupportActionBar().setTitle(mDrawerTitle);
+                System.out.println("open");
             }
         };
-
-        // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-        // Filter Dropdown
-        // TODO
-        filterView = (ListView) findViewById(R.id.filterList);
-
-
-
-        //mapFragment = new MyMapFragment();
-        // > tsc
-
 
 
         map = ((SupportMapFragment) getSupportFragmentManager()
@@ -154,14 +121,14 @@ public class MapActivity  extends ActionBarActivity implements
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Pass the event to ActionBarDrawerToggle, if it returns
-        // true, then it has handled the app icon touch event
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        // Handle your other action bar items...
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.map_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_filter:
                 SlidingDrawer drawer = (SlidingDrawer) findViewById(R.id.drawer);
@@ -177,20 +144,12 @@ public class MapActivity  extends ActionBarActivity implements
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.map_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
     /* The click listner for ListView in the navigation drawer */
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             selectItem(position);
-
+            System.out.println("CLIGG");
         }
     }
 
@@ -204,9 +163,7 @@ public class MapActivity  extends ActionBarActivity implements
             case 0:
                 if (mapFragment == null || !mapFragment.isAdded())
                     mapFragment = new MyMapFragment();
-
                 fragmentManager.beginTransaction().replace(R.id.frame, mapFragment).commit();
-                //fragmentManager.beginTransaction().attach(mapFragment).commit();
                 break;
             case 1:
             case 2:
@@ -216,27 +173,15 @@ public class MapActivity  extends ActionBarActivity implements
                 args.putString("url", "http://map.baobab.org/submit/");
                 fragment.setArguments(args);
                 fragmentManager.beginTransaction().replace(R.id.frame, fragment).commit();
-
-
                 break;
 
         }
-
-
-
-
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
-        setTitle(mMenuTitles[position]);
+        //setTitle(mMenuTitles[position]);
         mDrawerLayout.closeDrawer(mDrawerList);
 
 
-    }
-
-    @Override
-    public void setTitle(CharSequence title) {
-        mTitle = title;
-        getSupportActionBar().setTitle(mTitle);
     }
 
     @Override
@@ -263,15 +208,15 @@ public class MapActivity  extends ActionBarActivity implements
             }
         }*/
 
-        if (arg1 != null && (String)filterView.getItemAtPosition(arg1.getInt("position", 1)) != " Alle" ) {
+        //if (arg1 != null && (String)filterView.getItemAtPosition(arg1.getInt("position", 1)) != " Alle" ) {
 
 
 
-            Log.d(TAG, "filter type: " + (String)filterView.getItemAtPosition(arg1.getInt("position", 1)));
-            where += " OR types LIKE '%" + (String)filterView.getItemAtPosition(arg1.getInt("position", 1)) + "%'";
-        } else {
-            where += " OR types IS NOT 'none'";
-        }
+          //  Log.d(TAG, "filter type: " + (String)filterView.getItemAtPosition(arg1.getInt("position", 1)));
+          //  where += " OR types LIKE '%" + (String)filterView.getItemAtPosition(arg1.getInt("position", 1)) + "%'";
+        //} else {
+          //  where += " OR types IS NOT 'none'";
+        //}
 
         return new CursorLoader(this, Uri.parse(
                 "content://org.baobab.baolizer"), null, where, null,  null);
@@ -306,22 +251,22 @@ public class MapActivity  extends ActionBarActivity implements
         }
 
         // < TSC: Generate FitlerView from loaded data
-        if(filterView.getAdapter() == null) {
+        //if(filterView.getAdapter() == null) {
             filter_array = new ArrayList<String>(new HashSet<String>(filter_array));
 
             Collections.sort(filter_array);
             filter_array.set(filter_array.indexOf(""), " Alle");
-            filterView.setAdapter(new ArrayAdapter<String>(this,
-                    R.layout.filter_list_item, filter_array));
+          //  filterView.setAdapter(new ArrayAdapter<String>(this,
+          //          R.layout.filter_list_item, filter_array));
 
 
-            filterView.setOnItemClickListener(this);
+            //filterView.setOnItemClickListener(this);
 
 
-        }
+        //}
                 // > TSC
 
-        cursor.registerContentObserver(onChange);
+        //cursor.registerContentObserver(onChange);
     }
 
 
@@ -330,7 +275,7 @@ public class MapActivity  extends ActionBarActivity implements
 
         Log.d(TAG, "filter position: " + position);
 
-        filterView.setItemChecked(position, true);
+        //filterView.setItemChecked(position, true);
         SlidingDrawer drawer = (SlidingDrawer) findViewById(R.id.drawer);
         drawer.animateClose();
 
@@ -348,7 +293,10 @@ public class MapActivity  extends ActionBarActivity implements
         Uri url = Uri.parse(RefreshService.BASE_URL + WEBVIEW +
                 podioId.get(marker.getId()) + PAGE_HTML);
         System.out.println("clicked " + url);
-        startActivity(new Intent(this, WebActivity.class).setData(url));
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame, new WebFragment())
+                .addToBackStack("webview").commit();
+        //startActivity(new Intent(this, WebActivity.class).setData(url));
     }
 
 
