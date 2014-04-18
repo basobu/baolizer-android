@@ -27,9 +27,4 @@ android {
     compileSdkVersion 19
     buildToolsVersion "19.0.0"
 
-    defaultConfig {
-        testPackageName "org.baobab.baolizer.test"
-        testInstrumentationRunner "android.test.InstrumentationTestRunner"
-    }
-
 }
