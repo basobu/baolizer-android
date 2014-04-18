@@ -10,11 +10,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <fragment
+    <com.mapbox.mapboxsdk.views.MapView
       android:id="@+id/map"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      class="com.google.android.gms.maps.SupportMapFragment" />
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent" />
 
     <SlidingDrawer
       android:id="@+id/drawer"
