@@ -13,12 +13,12 @@ import android.util.Log;
 
 import org.json.JSONArray;
 
-public class StorageProvider extends ContentProvider {
+public class BaobabProvider extends ContentProvider {
 
     private static final String TAG = "PlaceProvider";
     private SQLiteStatement getCategory;
 
-    public class Baobab {
+    static public class Baobab {
         public static final String CATEGORIES = "types";
         public static final String STATE = "state";
         public static final String BABAB_ID = "name";
@@ -31,7 +31,7 @@ public class StorageProvider extends ContentProvider {
 
     private class DatabaseHelper extends SQLiteOpenHelper {
 
-        static final String TAG = "PlaceProvider";
+        static final String TAG = "BaobabProvider";
 
         public DatabaseHelper(Context context) {
             super(context, "baobab.db", null, 1);
@@ -111,6 +111,7 @@ public class StorageProvider extends ContentProvider {
         try {
             for (int i = 0; i < values.length; i++) {
                 ContentValues baobab = values[i];
+                System.out.println("insert " + baobab.getAsString(Baobab.GEOHASH));
                 insert.clearBindings();
                 if (baobab.containsKey(Baobab.GEOHASH))
                     insert.bindString(7, baobab.getAsString(Baobab.GEOHASH));
@@ -177,7 +178,7 @@ public class StorageProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
             String[] selectionArgs, String sortOrder) {
-        System.out.println(selection);
+        System.out.println("select " + selection);
         Cursor results = db.getReadableDatabase().query("baobabs",
                 null, selection, null, null, null, null);
         results.setNotificationUri(getContext().getContentResolver(), uri);
