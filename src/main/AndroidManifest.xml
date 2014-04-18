@@ -54,7 +54,7 @@
 
         <provider
             android:exported="true"
-            android:name=".StorageProvider"
+            android:name=".BaobabProvider"
             android:authorities="org.baobab.baolizer" >
         </provider>
 

@@ -3,6 +3,7 @@ package org.baobab.baolizer;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDoneException;
@@ -15,13 +16,13 @@ import org.json.JSONArray;
 
 public class BaobabProvider extends ContentProvider {
 
-    private static final String TAG = "PlaceProvider";
+    private static final String TAG = "BaobabProvider";
     private SQLiteStatement getCategory;
 
     static public class Baobab {
         public static final String CATEGORIES = "types";
         public static final String STATE = "state";
-        public static final String BABAB_ID = "name";
+        public static final String NAME = "name";
         public static final String ZIP = "zip";
         public static final String CITY = "city";
         public static final String STREET = "street";
@@ -41,9 +42,8 @@ public class BaobabProvider extends ContentProvider {
         public void onCreate(SQLiteDatabase db) {
             db.execSQL("CREATE TABLE baobabs (" +
                             "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                            Baobab.CATEGORIES + " INTEGER, " +
+                            Baobab.NAME + " TEXT, " +
                             Baobab.STATE + " TEXT, " +
-                            Baobab.BABAB_ID + " TEXT, " +
                             Baobab.ZIP + " TEXT, " +
                             Baobab.CITY + " TEXT, " +
                             Baobab.STREET + " TEXT, " +
@@ -90,8 +90,8 @@ public class BaobabProvider extends ContentProvider {
     static final String CLEAN_UP = "DELETE FROM baobabs";
 
     static final String INSERT_BAOBAB = "INSERT INTO baobabs (" +
+            Baobab.NAME + ", " +
             Baobab.STATE + ", " +
-            Baobab.BABAB_ID + ", " +
             Baobab.ZIP + ", " +
             Baobab.CITY + ", " +
             Baobab.STREET + ", " +
@@ -111,29 +111,28 @@ public class BaobabProvider extends ContentProvider {
         try {
             for (int i = 0; i < values.length; i++) {
                 ContentValues baobab = values[i];
-                System.out.println("insert " + baobab.getAsString(Baobab.GEOHASH));
                 insert.clearBindings();
                 if (baobab.containsKey(Baobab.GEOHASH))
-                    insert.bindString(7, baobab.getAsString(Baobab.GEOHASH));
+                    insert.bindString(6, baobab.getAsString(Baobab.GEOHASH));
                 else continue;
                 if (baobab.containsKey(Baobab.PODIO_ID))
-                    insert.bindString(8, baobab.getAsString(Baobab.PODIO_ID));
+                    insert.bindString(7, baobab.getAsString(Baobab.PODIO_ID));
+                if (baobab.containsKey(Baobab.NAME))
+                    insert.bindString(1, baobab.getAsString(Baobab.NAME));
                 if (baobab.containsKey(Baobab.STATE))
                     insert.bindString(2, baobab.getAsString(Baobab.STATE));
-                if (baobab.containsKey(Baobab.BABAB_ID))
-                    insert.bindString(3, baobab.getAsString(Baobab.BABAB_ID));
                 if (baobab.containsKey(Baobab.ZIP))
-                    insert.bindString(4, baobab.getAsString(Baobab.ZIP));
+                    insert.bindString(3, baobab.getAsString(Baobab.ZIP));
                 if (baobab.containsKey(Baobab.CITY))
-                    insert.bindString(5, baobab.getAsString(Baobab.CITY));
+                    insert.bindString(4, baobab.getAsString(Baobab.CITY));
                 if (baobab.containsKey(Baobab.STREET))
-                    insert.bindString(6, baobab.getAsString(Baobab.STREET));
+                    insert.bindString(5, baobab.getAsString(Baobab.STREET));
                 long id = insert.executeInsert();
                 if (baobab.containsKey(Baobab.CATEGORIES)) {
                     JSONArray categories = new JSONArray(
                             baobab.getAsString(Baobab.CATEGORIES));
                     for (int j = 0; j < categories.length(); j++) {
-                        insertCategory(id, categories.getString(i));
+                        insertCategory(id, categories.getString(j));
                     }
                 }
             }
@@ -178,9 +177,14 @@ public class BaobabProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
             String[] selectionArgs, String sortOrder) {
-        System.out.println("select " + selection);
-        Cursor results = db.getReadableDatabase().query("baobabs",
-                null, selection, null, null, null, null);
+        if (uri.getPath().equals("/categories")) {
+            return db.getReadableDatabase().query("categories",
+                    null, null, null, null, null, null);
+        }
+        Cursor results = db.getReadableDatabase().query("baobabs " +
+                " JOIN category_baobab ON category_baobab.baobab_id = baobabs._id " +
+                " JOIN categories ON category_baobab.category_id = categories._id",
+                null, selection, null, Baobab.NAME, null, null);
         results.setNotificationUri(getContext().getContentResolver(), uri);
         return results;
     }
@@ -197,4 +201,5 @@ public class BaobabProvider extends ContentProvider {
         // TODO Auto-generated method stub
         return 0;
     }
+
 }
