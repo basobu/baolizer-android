@@ -22,6 +22,7 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
+import static org.baobab.baolizer.BaobabProvider.Baobab;
 
 
 public class RefreshService extends IntentService {
@@ -73,25 +74,25 @@ public class RefreshService extends IntentService {
                 if (val != null) {
                     String[] latlon = val.split(KOMMA);
                     if (latlon.length == 2) {
-                        values.put(StorageProvider.Baobab.GEOHASH, GeoHash.withBitPrecision(
+                        values.put(BaobabProvider.Baobab.GEOHASH, GeoHash.withBitPrecision(
                                 Double.parseDouble(latlon[0]),
                                 Double.parseDouble(latlon[1]),
                                 55).toBase32());
                     } else Log.d(TAG, "strange latlon: " + val);
                 } else continue;
-                values.put(StorageProvider.Baobab.PODIO_ID, podio_id);
+                values.put(BaobabProvider.Baobab.PODIO_ID, podio_id);
                 val = get(item, NAME);
-                if (val != null) values.put(StorageProvider.Baobab.BABAB_ID, val);
+                if (val != null) values.put(Baobab.NAME, val);
                 val = get(item, "status");
-                if (val != null) values.put(StorageProvider.Baobab.STATE, val);
+                if (val != null) values.put(Baobab.STATE, val);
                 val = get(item, ZIP);
-                if (val != null) values.put(StorageProvider.Baobab.ZIP, val);
+                if (val != null) values.put(Baobab.ZIP, val);
                 val = get(item, CITY);
-                if (val != null) values.put(StorageProvider.Baobab.CITY, val);
+                if (val != null) values.put(Baobab.CITY, val);
                 val = get(item, STREET);
-                if (val != null) values.put(StorageProvider.Baobab.STREET, val);
+                if (val != null) values.put(Baobab.STREET, val);
                 val = get(item, TYP);
-                if (val != null) values.put(StorageProvider.Baobab.CATEGORIES, val);
+                if (val != null) values.put(Baobab.CATEGORIES, val);
                 items.add(values);
                 Log.d(TAG, " + " + values);
             }
