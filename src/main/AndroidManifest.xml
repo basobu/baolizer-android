@@ -26,28 +26,20 @@
 
         <activity
             android:name="org.baobab.baolizer.MapActivity"
-            android:icon="@drawable/ic_launcher" >
+            android:icon="@drawable/ic_launcher"
+            android:configChanges="orientation|keyboardHidden|screenSize" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:mimeType="vnd.android.cursor.item/vnd.baobab" />
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".WebActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:theme="@android:style/Theme.Dialog" >
-        </activity>
-
-        <provider
+      <provider
             android:exported="true"
             android:name=".BaobabProvider"
             android:authorities="org.baobab.baolizer" >
@@ -55,6 +47,6 @@
 
         <service android:name="RefreshService"></service>
 
-        </application>
+    </application>
 
 </manifest>
