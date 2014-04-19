@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<SlidingDrawer
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/drawer"
+  android:orientation="horizontal"
+  android:layout_width="240dp"
+  android:layout_gravity="right"
+  android:layout_height="match_parent"
+  android:content="@+id/categories"
+  android:handle="@+id/handle">
+
+  <ImageButton
+    android:id="@+id/handle"
+    android:layout_height="0dp"
+    android:layout_width="0dp"
+    android:src="@drawable/ic_action_filter"/>
+
+  <ListView
+    android:id="@+id/categories"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:choiceMode="multipleChoice"
+    android:background="#AA111111"/>
+</SlidingDrawer>
+  
