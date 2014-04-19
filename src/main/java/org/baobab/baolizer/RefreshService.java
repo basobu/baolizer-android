@@ -91,7 +91,7 @@ public class RefreshService extends IntentService {
                 if (val != null) values.put(Baobab.CITY, val);
                 val = get(item, STREET);
                 if (val != null) values.put(Baobab.STREET, val);
-                val = get(item, TYP);
+                val = item.getString(TYP);
                 if (val != null) values.put(Baobab.CATEGORIES, val);
                 items.add(values);
                 Log.d(TAG, " + " + values);
