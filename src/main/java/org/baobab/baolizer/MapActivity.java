@@ -193,7 +193,7 @@ public class MapActivity  extends ActionBarActivity implements
 
     private void openWebsite(String url) {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame, new WebFragment(url))
+                .replace(R.id.frame, WebFragment.newInstance(url))
                 .addToBackStack("submit")
                 .commit();
     }

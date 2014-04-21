@@ -26,8 +26,16 @@ public class WebFragment extends Fragment {
     private WebView webView;
     private ImageView progress;
 
-    public WebFragment(String url) {
-        this.url = url;
+    public WebFragment() {
+        this.url = "http://baobab.org";
+    }
+
+    public static WebFragment newInstance(String url) {
+        Bundle b = new Bundle();
+        b.putString("url", url);
+        WebFragment f = new WebFragment();
+        f.setArguments(b);
+        return f;
     }
 
     @Override
@@ -39,7 +47,7 @@ public class WebFragment extends Fragment {
         webView.getSettings().setSaveFormData(false);
         webView.getSettings().setSavePassword(false);
         webView.requestFocus(View.FOCUS_DOWN);
-        webView.loadUrl(url);
+        webView.loadUrl(getArguments().getString("url"));
 
         webView.setWebViewClient(new WebViewClient() {
 
