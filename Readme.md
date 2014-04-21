@@ -1,8 +1,7 @@
-# Plant [baobab trees](http://baobab.org) all over the world!
+# Plant [baobab trees](http://baobab.org)
 ![qr code](http://chart.apis.google.com/chart?chs=200x200&cht=qr&chld=|1&chl=bit.ly%2FGzFqBp)
 
-Download Baolizer Android App
-## [bit.ly/GzFqBp](http://bit.ly/GzFqBp)
+[Download Baolizer Android App](http://bit.ly/GzFqBp)
 
 
  
