@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDoneException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -36,7 +37,7 @@ public class BaobabProvider extends ContentProvider {
         static final String TAG = "BaobabProvider";
 
         public DatabaseHelper(Context context) {
-            super(context, "baobab.db", null, 1);
+            super(context, "baobab.db", null, 2);
         }
 
         @Override
@@ -66,6 +67,11 @@ public class BaobabProvider extends ContentProvider {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldV, int newV) {
+            db.execSQL("DROP TABLE IF EXISTS baobabs;");
+            db.execSQL("DROP TABLE IF EXISTS categories;");
+            db.execSQL("DROP TABLE IF EXISTS category_baobab;");
+            PreferenceManager.getDefaultSharedPreferences(getContext()).edit()
+                    .remove(RefreshService.LAST_REFRESH).commit();
             onCreate(db);
         }
     }
