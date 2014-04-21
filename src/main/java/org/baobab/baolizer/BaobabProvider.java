@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 
 public class BaobabProvider extends ContentProvider {
 
@@ -129,6 +130,7 @@ public class BaobabProvider extends ContentProvider {
                     insert.bindString(5, baobab.getAsString(Baobab.STREET));
                 long id = insert.executeInsert();
                 if (baobab.containsKey(Baobab.CATEGORIES)) {
+                    Log.d(TAG, "json: " + baobab.getAsString(Baobab.CATEGORIES));
                     JSONArray categories = new JSONArray(
                             baobab.getAsString(Baobab.CATEGORIES));
                     for (int j = 0; j < categories.length(); j++) {
@@ -137,6 +139,9 @@ public class BaobabProvider extends ContentProvider {
                 }
             }
             db.getWritableDatabase().setTransactionSuccessful();
+        } catch (JSONException e) {
+            Log.e(TAG, "bad json! ");
+            e.printStackTrace();
         } catch (Exception e) {
             Log.e(TAG, "error during bulk insert: " + e.getClass().getName());
             e.printStackTrace();

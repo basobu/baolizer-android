@@ -1,25 +1,22 @@
 
 package org.baobab.baolizer;
 
-import android.content.ClipData;
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -28,15 +25,11 @@ import android.widget.SlidingDrawer;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.overlay.GpsLocationProvider;
-import com.mapbox.mapboxsdk.overlay.ItemizedIconOverlay;
-import com.mapbox.mapboxsdk.overlay.ItemizedOverlay;
 import com.mapbox.mapboxsdk.overlay.Marker;
 import com.mapbox.mapboxsdk.overlay.UserLocationOverlay;
 import com.mapbox.mapboxsdk.tileprovider.tilesource.MapboxTileLayer;
+import com.mapbox.mapboxsdk.views.InfoWindow;
 import com.mapbox.mapboxsdk.views.MapView;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import ch.hsr.geohash.GeoHash;
 
@@ -44,12 +37,14 @@ public class MapActivity  extends ActionBarActivity implements
         ListView.OnItemClickListener, LoaderCallbacks<Cursor> {
 
     private static final String TAG = "Baolizer";
+    public static final String SUBMIT = "submit/";
+    public static final String WEBVIEW = "webview/";
+    private static final String PAGE_HTML = ".page.html";
+
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout navDrawer;
     private ListView drawerList;
     private MapView map;
-    private ItemizedIconOverlay baobabs;
-    private HashMap<String, String> podioId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -117,33 +112,46 @@ public class MapActivity  extends ActionBarActivity implements
         }
         map.invalidate();
         if (cursor.getCount() == 0) return;
-        podioId = new HashMap<String, String>();
         while (cursor.moveToNext()) {
             GeoHash geohash = GeoHash.fromGeohashString(cursor.getString(6));
-            Marker m = new Marker(map,
-                    cursor.getString(1),
-                    "foo",
+            Marker m = new Baobab(
+                    cursor.getString(7), // id
+                    cursor.getString(1), // name
+                    cursor.getString(5), // street
                     new LatLng(geohash.getPoint().getLatitude(),
                             geohash.getPoint().getLongitude()));
-            m.setMarker(getResources().getDrawable(R.drawable.tree));
-            m.setHotspot(Marker.HotspotPlace.BOTTOM_CENTER);
             map.addMarker(m);
         }
         requeryOnChange(cursor);
     }
 
-/*
-    @Override
-    public void onInfoWindowClick(Marker marker) {
-        Uri url = Uri.parse(RefreshService.BASE_URL + WEBVIEW +
-                podioId.get(marker.getId()) + PAGE_HTML);
-        System.out.println("clicked " + url);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame, new WebFragment())
-                .addToBackStack("webview").commit();
-        //startActivity(new Intent(this, WebActivity.class).setData(url));
+    public class Baobab extends Marker {
+
+        private final String id;
+
+        public Baobab(String url, String title, String description, LatLng latLng) {
+            super(map, title, description, latLng);
+            setMarker(getResources().getDrawable(R.drawable.tree));
+            setHotspot(Marker.HotspotPlace.BOTTOM_CENTER);
+            this.id = url;
+        }
+
+        @Override
+        protected InfoWindow createTooltip(MapView mv) {
+            InfoWindow bubble = new InfoWindow(R.layout.tooltip, mv);
+            bubble.getView().setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                        openWebsite(RefreshService.BASE_URL +
+                                WEBVIEW + id + PAGE_HTML);
+                    }
+                    return true;
+                }
+            });
+            return bubble;
+        }
     }
-*/
 
     private void setupNavDrawer() {
         navDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -178,13 +186,16 @@ public class MapActivity  extends ActionBarActivity implements
         drawerList.setItemChecked(position, true);
         switch (position) {
             case 1:
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frame, new WebFragment(
-                                "http://map.baobab.org/submit/"))
-                        .addToBackStack("submit")
-                        .commit();
+                openWebsite("http://map.baobab.org/submit/");
         }
         closeDrawers();
+    }
+
+    private void openWebsite(String url) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame, new WebFragment(url))
+                .addToBackStack("submit")
+                .commit();
     }
 
     @Override
@@ -207,7 +218,7 @@ public class MapActivity  extends ActionBarActivity implements
 
     @Override
     public void onLoaderReset(Loader<Cursor> l) {
-        System.out.println("loader reset");
+        Log.d(TAG, "loader reset");
     }
 
     private boolean closeDrawers() {

@@ -5,7 +5,7 @@
   android:id="@+id/frame"
   android:layout_width="fill_parent"
   android:layout_height="fill_parent"
-  android:background="@android:color/white"
+  android:background="@android:color/transparent"
   android:padding="10dp">
 
   <ImageView
@@ -20,7 +20,8 @@
     android:id="@+id/webview"
     android:minWidth="198dp"
     android:minHeight="123dp"
-    android:layout_height="fill_parent"
-    android:layout_width="fill_parent" />
+    android:layout_gravity="center"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content" />
 
 </FrameLayout>
