@@ -92,7 +92,12 @@ public class WebFragment extends Fragment {
                 return true; //super.onJsAlert(view, url, message, result);
             }
         });
+        frame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
         return frame;
     }
-
 }
