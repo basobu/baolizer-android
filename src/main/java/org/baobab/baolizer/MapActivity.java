@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -16,20 +17,11 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SlidingDrawer;
-
-import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.overlay.GpsLocationProvider;
-import com.mapbox.mapboxsdk.overlay.Marker;
-import com.mapbox.mapboxsdk.overlay.UserLocationOverlay;
-import com.mapbox.mapboxsdk.tileprovider.tilesource.MapboxTileLayer;
-import com.mapbox.mapboxsdk.views.InfoWindow;
-import com.mapbox.mapboxsdk.views.MapView;
 
 import ch.hsr.geohash.GeoHash;
 
@@ -44,7 +36,12 @@ public class MapActivity  extends ActionBarActivity implements
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout navDrawer;
     private ListView drawerList;
-    private MapView map;
+    private Map map;
+
+    public interface Map {
+        public void clear();
+        public void addBaobab(GeoHash latlng, String url, String title, String description);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,19 +52,10 @@ public class MapActivity  extends ActionBarActivity implements
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         setupNavDrawer();
-        setupMap();
-    }
-
-    private void setupMap() {
-        map = (MapView) findViewById(R.id.map);
-        map.setTileSource(new MapboxTileLayer("examples.map-zgrqqx0w"));
-        map.setCenter(new LatLng(48.138790, 11.553338));
-        map.setZoom(13);
-        UserLocationOverlay myLocationOverlay = new UserLocationOverlay(
-                new GpsLocationProvider(this), map);
-        myLocationOverlay.enableMyLocation();
-        myLocationOverlay.setDrawAccuracyEnabled(true);
-        map.getOverlays().add(myLocationOverlay);
+        map = new MapboxFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame, (Fragment) map)
+                .commit();
     }
 
     @Override
@@ -107,50 +95,21 @@ public class MapActivity  extends ActionBarActivity implements
     @Override
     public void onLoadFinished(Loader<Cursor> l, final Cursor cursor) {
         Log.d(TAG, "load finished: " + cursor.getCount());
-        if (map.getItemizedOverlays().size() > 0) {
-            map.getItemizedOverlays().get(0).removeAllItems();
-        }
-        map.invalidate();
+
         if (cursor.getCount() == 0) return;
         while (cursor.moveToNext()) {
-            GeoHash geohash = GeoHash.fromGeohashString(cursor.getString(6));
-            Marker m = new Baobab(
-                    cursor.getString(7), // id
-                    cursor.getString(1), // name
-                    cursor.getString(5), // street
-                    new LatLng(geohash.getPoint().getLatitude(),
-                            geohash.getPoint().getLongitude()));
-            map.addMarker(m);
+            GeoHash latlng = GeoHash.fromGeohashString(cursor.getString(6));
+            map.addBaobab(latlng,
+                    cursor.getString(7),  // id
+                    cursor.getString(1),  // name
+                    cursor.getString(5)); // street
         }
         requeryOnChange(cursor);
     }
 
-    public class Baobab extends Marker {
-
-        private final String id;
-
-        public Baobab(String url, String title, String description, LatLng latLng) {
-            super(map, title, description, latLng);
-            setMarker(getResources().getDrawable(R.drawable.tree));
-            setHotspot(Marker.HotspotPlace.BOTTOM_CENTER);
-            this.id = url;
-        }
-
-        @Override
-        protected InfoWindow createTooltip(MapView mv) {
-            InfoWindow bubble = new InfoWindow(R.layout.tooltip, mv);
-            bubble.getView().setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    if (event.getAction() == MotionEvent.ACTION_UP) {
-                        openWebsite(RefreshService.BASE_URL +
-                                WEBVIEW + id + PAGE_HTML);
-                    }
-                    return true;
-                }
-            });
-            return bubble;
-        }
+    public void onBaobabClicked(String id) {
+        openWebsite(RefreshService.BASE_URL +
+                WEBVIEW + id + PAGE_HTML);
     }
 
     private void setupNavDrawer() {
@@ -193,7 +152,7 @@ public class MapActivity  extends ActionBarActivity implements
 
     private void openWebsite(String url) {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame, WebFragment.newInstance(url))
+                .replace(R.id.container, WebFragment.newInstance(url))
                 .addToBackStack("submit")
                 .commit();
     }
