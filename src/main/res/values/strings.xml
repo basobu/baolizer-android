@@ -1,27 +1,37 @@
 <resources>
 
-    <string name="app_name">Baolizer</string>
+  <string name="app_name">Baolizer</string>
 
-    <string name="leh">Lebensmittelhandel</string>
-    <string name="geh">Getränkehandel</string>
-    <string name="reseller">Großhandel</string>
-    <string name="multi">Multiplikator/Seminare/Workshops</string>
-    <string name="gastro">Gastronomie</string>
-    <string name="wellness">Kosmetik/Wellness</string>
-    <string name="reformhaus">Reformhaus</string>
-    <string name="hersteller">Hersteller</string>
-    <string name="doctor">Berater/Therapeut/Arzt</string>
-    <string name="webshop">Internethandel</string>
-    <string name="events">Veranstalter</string>
+  <string name="leh">Lebensmittelhandel</string>
+  <string name="geh">Getränkehandel</string>
+  <string name="reseller">Großhandel</string>
+  <string name="multi">Multiplikator/Seminare/Workshops</string>
+  <string name="gastro">Gastronomie</string>
+  <string name="wellness">Kosmetik/Wellness</string>
+  <string name="reformhaus">Reformhaus</string>
+  <string name="hersteller">Hersteller</string>
+  <string name="doctor">Berater/Therapeut/Arzt</string>
+  <string name="webshop">Internethandel</string>
+  <string name="events">Veranstalter</string>
 
-    <string-array name="menu">
-        <item>Karte</item>
-        <item>Neuen Ort vorschlagen</item>
-        <item>Impressum</item>
-    </string-array>
+  <string-array name="menu">
+    <item>Karte</item>
+    <item>Neuen Ort vorschlagen</item>
+    <item>Impressum</item>
+  </string-array>
 
-    <string name="drawer_open">Öffnen</string>
-    <string name="drawer_close">Schliessen</string>
-    <string name="action_filter">Filter</string>
+  <string name="drawer_open">Öffnen</string>
+  <string name="drawer_close">Schliessen</string>
+  <string name="action_filter">Filter</string>
+  <string name="action_settings">Settings</string>
+  <string name="settings_map_description">mapping library to display baobabs</string>
+  <string name="uninstall_title">Clean up?</string>
+  <string name="uninstall_msg">uninstall play services..</string>
+  <string name="uninstall_btn_yes">Uninstall</string>
+  <string name="uninstall_btn_not">Leave installed</string>
+  <string-array name="settings_map_list">
+    <item>Mapbox Openstreetmap</item>
+    <item>Google Maps</item>
+  </string-array>
 
 </resources>

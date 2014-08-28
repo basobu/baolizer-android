@@ -2,10 +2,12 @@
 package org.baobab.baolizer;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
@@ -22,6 +24,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SlidingDrawer;
+
+import static com.google.android.gms.common.GooglePlayServicesUtil.*;
+import static com.google.android.gms.common.ConnectionResult.*;
 
 import ch.hsr.geohash.GeoHash;
 
@@ -47,15 +52,44 @@ public class MapActivity  extends ActionBarActivity implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        getSupportLoaderManager().initLoader(0, null, this);
         startService(new Intent(this, RefreshService.class));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         setupNavDrawer();
-        map = new MapboxFragment();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        getSupportFragmentManager().beginTransaction()
+                .remove((Fragment) map).commitAllowingStateLoss();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if (!prefs.contains("map")) {
+            if (isGooglePlayServicesAvailable(this) == SUCCESS) {
+                prefs.edit().putString("map", "Google Maps").commit();
+            } else {
+                prefs.edit().putString("map", "Mapbox Openstreetmap").commit();
+            }
+        }
+        if (prefs.getString("map", "").equals("Google Maps")) {
+            map = new GMapsFragment();
+        } else if (prefs.getString("map", "").equals("Mapbox Openstreetmap")) {
+            map = new MapboxFragment();
+        }
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.frame, (Fragment) map)
                 .commit();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getSupportLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -78,6 +112,9 @@ public class MapActivity  extends ActionBarActivity implements
                     drawer.animateOpen();
                 }
                 return true;
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -96,7 +133,9 @@ public class MapActivity  extends ActionBarActivity implements
     public void onLoadFinished(Loader<Cursor> l, final Cursor cursor) {
         Log.d(TAG, "load finished: " + cursor.getCount());
 
+        map.clear();
         if (cursor.getCount() == 0) return;
+        cursor.moveToPosition(-1);
         while (cursor.moveToNext()) {
             GeoHash latlng = GeoHash.fromGeohashString(cursor.getString(6));
             map.addBaobab(latlng,

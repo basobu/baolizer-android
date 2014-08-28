@@ -154,6 +154,8 @@ public class BaobabProvider extends ContentProvider {
         } finally {
             db.getWritableDatabase().endTransaction();
             getContext().getContentResolver().notifyChange(uri, null);
+            getContext().getContentResolver().notifyChange(Uri.parse(
+                    "content://org.baobab.baolizer/categories"), null);
         }
         return values.length;
     }

@@ -4,4 +4,8 @@
         android:icon="@drawable/ic_action_filter"
         android:title="@string/action_filter"
         baoliza:showAsAction="always"  />
+    <item android:id="@+id/action_settings"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:title="@string/action_settings"
+        baoliza:showAsAction="never"  />
 </menu>
