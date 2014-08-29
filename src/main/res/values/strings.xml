@@ -23,12 +23,12 @@
   <string name="drawer_open">Öffnen</string>
   <string name="drawer_close">Schliessen</string>
   <string name="action_filter">Filter</string>
-  <string name="action_settings">Settings</string>
-  <string name="settings_map_description">mapping library to display baobabs</string>
-  <string name="uninstall_title">Clean up?</string>
-  <string name="uninstall_msg">uninstall play services..</string>
-  <string name="uninstall_btn_yes">Uninstall</string>
-  <string name="uninstall_btn_not">Leave installed</string>
+  <string name="action_settings">Einstellung</string>
+  <string name="settings_map_description">Kartensystem Auswählen</string>
+  <string name="uninstall_title">Option: Play services deinstallieren</string>
+  <string name="uninstall_msg">Deinstallieren der play services..</string>
+  <string name="uninstall_btn_yes">Deinstallieren</string>
+  <string name="uninstall_btn_not">Ohne deinstallation fortsetzen</string>
   <string-array name="settings_map_list">
     <item>Mapbox Openstreetmap</item>
     <item>Google Maps</item>
