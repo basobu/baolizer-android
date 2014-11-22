@@ -19,6 +19,7 @@ import android.app.IntentService;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -41,10 +42,12 @@ public class RefreshService extends IntentService {
     private static final long REFRESH_INTERVALL = 7*24*3600*1000;
     public static final String LAST_REFRESH = "last_refresh";
     private static final String SUCCESS = "..baobabs refreshed";
+    private final Handler handler;
 
     public RefreshService() {
         super(TAG);
         Log.d(TAG, "constructor");
+        handler = new Handler();
     }
 
     @Override
@@ -98,11 +101,17 @@ public class RefreshService extends IntentService {
             }
             Log.d(TAG, "done " + items.size());
             getContentResolver().bulkInsert(Uri.parse(
-                    "content://org.baobab.baolizer"),
+                            "content://org.baobab.baolizer"),
                     items.toArray(new ContentValues[items.size()]));
             PreferenceManager.getDefaultSharedPreferences(this).edit()
                     .putLong(LAST_REFRESH, System.currentTimeMillis()).commit();
-            Toast.makeText(this, SUCCESS, Toast.LENGTH_SHORT).show();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(RefreshService.this,
+                            SUCCESS, Toast.LENGTH_SHORT).show();
+                }
+            });
             Log.d(TAG, SUCCESS);
         } catch (JSONException e) {
             e.printStackTrace();

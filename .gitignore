@@ -1,7 +1,6 @@
 bin
 gen
 build
-gradle
 .idea
 .gradle
 .project

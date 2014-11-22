@@ -191,8 +191,10 @@ public class BaobabProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection,
             String[] selectionArgs, String sortOrder) {
         if (uri.getPath().equals("/categories")) {
-            return db.getReadableDatabase().query("categories",
+            Cursor cats = db.getReadableDatabase().query("categories",
                     null, null, null, null, null, null);
+            cats.setNotificationUri(getContext().getContentResolver(), uri);
+            return cats;
         }
         Cursor results = db.getReadableDatabase().query("baobabs " +
                 " JOIN category_baobab ON category_baobab.baobab_id = baobabs._id " +
