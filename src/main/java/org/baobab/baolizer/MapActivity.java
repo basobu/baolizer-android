@@ -8,22 +8,16 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.SlidingDrawer;
+import android.widget.Toast;
 
 import static com.google.android.gms.common.GooglePlayServicesUtil.*;
 import static com.google.android.gms.common.ConnectionResult.*;
@@ -31,16 +25,13 @@ import static com.google.android.gms.common.ConnectionResult.*;
 import ch.hsr.geohash.GeoHash;
 
 public class MapActivity  extends ActionBarActivity implements
-        ListView.OnItemClickListener, LoaderCallbacks<Cursor> {
+        View.OnClickListener, LoaderCallbacks<Cursor> {
 
     private static final String TAG = "Baolizer";
     public static final String SUBMIT = "submit/";
     public static final String WEBVIEW = "webview/";
     private static final String PAGE_HTML = ".page.html";
 
-    private ActionBarDrawerToggle mDrawerToggle;
-    private DrawerLayout navDrawer;
-    private ListView drawerList;
     private Map map;
 
     public interface Map {
@@ -53,16 +44,6 @@ public class MapActivity  extends ActionBarActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         startService(new Intent(this, RefreshService.class));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        setupNavDrawer();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        getSupportFragmentManager().beginTransaction()
-                .remove((Fragment) map).commitAllowingStateLoss();
     }
 
     @Override
@@ -93,31 +74,15 @@ public class MapActivity  extends ActionBarActivity implements
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.map_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        switch (item.getItemId()) {
-            case R.id.action_filter:
-                SlidingDrawer drawer = (SlidingDrawer) findViewById(R.id.drawer);
-                if (drawer.isOpened()) {
-                    drawer.animateClose();
-                } else {
-                    drawer.animateOpen();
-                }
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            SlidingDrawer drawer = (SlidingDrawer) findViewById(R.id.drawer);
+            if (drawer.isOpened()) {
+                drawer.animateClose();
                 return true;
-            case R.id.action_settings:
-                startActivity(new Intent(this, SettingsActivity.class));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+            }
         }
+        return super.onKeyUp(keyCode, event);
     }
 
     @Override
@@ -128,11 +93,10 @@ public class MapActivity  extends ActionBarActivity implements
                 .findFragmentById(R.id.categories)).getWhereClause(),
                 null,  null);
     }
-    
+
     @Override
     public void onLoadFinished(Loader<Cursor> l, final Cursor cursor) {
         Log.d(TAG, "load finished: " + cursor.getCount());
-
         map.clear();
         if (cursor.getCount() == 0) return;
         cursor.moveToPosition(-1);
@@ -143,50 +107,25 @@ public class MapActivity  extends ActionBarActivity implements
                     cursor.getString(1),  // name
                     cursor.getString(5)); // street
         }
-        requeryOnChange(cursor);
+        cursor.registerContentObserver(requery);
+    }
+
+    ContentObserver requery = new ContentObserver(null) {
+
+        @Override
+        public void onChange(boolean selfChange) {
+            getSupportLoaderManager().restartLoader(0, null, MapActivity.this);
+        }
+    };
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> l) {
+        Log.d(TAG, "loader reset");
     }
 
     public void onBaobabClicked(String id) {
         openWebsite(RefreshService.BASE_URL +
                 WEBVIEW + id + PAGE_HTML);
-    }
-
-    private void setupNavDrawer() {
-        navDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerList = (ListView) findViewById(R.id.left_drawer);
-        drawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item,
-                getResources().getStringArray(R.array.menu)));
-        drawerList.setOnItemClickListener(this);
-        mDrawerToggle = new ActionBarDrawerToggle(
-                this,                  /* host Activity */
-                navDrawer,         /* DrawerLayout object */
-                R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
-                R.string.drawer_open,  /* "open drawer" description */
-                R.string.drawer_close  /* "close drawer" description */
-        ) {
-
-            /** Called when a drawer has settled in a completely closed state. */
-            public void onDrawerClosed(View view) {
-                System.out.println("close");
-            }
-
-            /** Called when a drawer has settled in a completely open state. */
-            public void onDrawerOpened(View drawerView) {
-                System.out.println("open");
-            }
-        };
-        navDrawer.setDrawerListener(mDrawerToggle);
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        drawerList.setItemChecked(position, true);
-        switch (position) {
-            case 1:
-                openWebsite("http://map.baobab.org/submit/");
-        }
-        closeDrawers();
     }
 
     private void openWebsite(String url) {
@@ -197,39 +136,9 @@ public class MapActivity  extends ActionBarActivity implements
     }
 
     @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (closeDrawers()) return true;
-        }
-        return super.onKeyUp(keyCode, event);
-    }
-
-    private void requeryOnChange(Cursor cursor) {
-        cursor.registerContentObserver(new ContentObserver(null) {
-
-            @Override
-            public void onChange(boolean selfChange) {
-                getSupportLoaderManager().restartLoader(0, null, MapActivity.this);
-            }
-        });
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> l) {
-        Log.d(TAG, "loader reset");
-    }
-
-    private boolean closeDrawers() {
-        boolean closed = false;
-        SlidingDrawer drawer = (SlidingDrawer) findViewById(R.id.drawer);
-        if (drawer.isOpened()) {
-            drawer.close();
-            closed = true;
-        }
-        if (navDrawer.isDrawerOpen(drawerList)) {
-            navDrawer.closeDrawer(drawerList);
-            closed = true;
-        }
-        return closed;
+    protected void onStop() {
+        super.onStop();
+        getSupportFragmentManager().beginTransaction()
+                .remove((Fragment) map).commitAllowingStateLoss();
     }
 }
