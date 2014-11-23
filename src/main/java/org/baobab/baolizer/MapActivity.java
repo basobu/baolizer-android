@@ -132,16 +132,15 @@ public class MapActivity  extends ActionBarActivity implements
                     cursor.getString(1),  // name
                     cursor.getString(5)); // street
         }
-        cursor.registerContentObserver(requery);
+        cursor.registerContentObserver(new ContentObserver(null) {
+
+            @Override
+            public void onChange(boolean selfChange) {
+                getSupportLoaderManager().restartLoader(0, null, MapActivity.this);
+                cursor.unregisterContentObserver(this);
+            }
+        });
     }
-
-    ContentObserver requery = new ContentObserver(null) {
-
-        @Override
-        public void onChange(boolean selfChange) {
-            getSupportLoaderManager().restartLoader(0, null, MapActivity.this);
-        }
-    };
 
     @Override
     public void onLoaderReset(Loader<Cursor> l) {
