@@ -33,7 +33,23 @@ public class ProviderTest extends ProviderTestCase2<BaobabProvider> {
         return items;
     }
 
-    public void testBaobabs() {
+    public void testInsert() {
+
+        getMockContentResolver().bulkInsert(
+                Uri.parse("content://org.baobab.baolizer.test/baobabs"),
+                dummyBaobabs());
+
+
+        Cursor baobabs = getMockContentResolver().query(
+                Uri.parse("content://org.baobab.baolizer.test/baobabs"),
+                null, null, null, null);
+        assertEquals("three baobabs", 3, baobabs.getCount());
+        baobabs.moveToPosition(1);
+        assertEquals("name", "baz", baobabs.getString(1));
+        assertEquals("geohash", "abc3", baobabs.getString(6));
+    }
+
+    public void testCategories() {
 
         getMockContentResolver().bulkInsert(
                 Uri.parse("content://org.baobab.baolizer.test/baobabs"),
@@ -50,7 +66,7 @@ public class ProviderTest extends ProviderTestCase2<BaobabProvider> {
                 Uri.parse("content://org.baobab.baolizer.test/baobabs"), null,
                 "categories.name IS 'laden' OR categories.name IS 'gastro'",
                 null, null);
-        assertEquals("three baobabs", 2, baobabs.getCount());
+        assertEquals("two baobabs", 2, baobabs.getCount());
         baobabs.moveToPosition(1);
         assertEquals("name", "baz", baobabs.getString(1));
         assertEquals("geohash", "abc3", baobabs.getString(6));
