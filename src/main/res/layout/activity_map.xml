@@ -14,6 +14,38 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent" />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/frame_tree"/>
+
+    <ImageButton
+        android:id="@+id/hand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_btn"
+        android:layout_marginLeft="@dimen/margin_btn_hand_left"
+        android:layout_marginTop="@dimen/margin_btn_hand_top"
+        android:src="@drawable/btn_hand" />
+
+    <ImageButton
+        android:id="@+id/filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_btn"
+        android:layout_marginLeft="@dimen/margin_btn_filter_left"
+        android:layout_marginTop="@dimen/margin_btn_filter_top"
+        android:src="@drawable/btn_filter" />
+
+    <ImageButton
+        android:id="@+id/info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_btn"
+        android:layout_marginLeft="@dimen/margin_btn_info_left"
+        android:layout_marginTop="@dimen/margin_btn_info_top"
+        android:src="@drawable/btn_info" />
+
     <fragment
       android:id="@+id/categories"
       android:layout_width="match_parent"
