@@ -19,11 +19,15 @@ public class ProviderTest extends ProviderTestCase2<BaobabProvider> {
         baobab.put(Baobab.NAME, "foo");
         baobab.put(Baobab.GEOHASH, "abc1");
         baobab.put(Baobab.CATEGORIES, "[\"kiosk\", \"markt\"]");
+        baobab.put(Baobab.PRODUCTS, "[{\"app_item_id\": 14, \"title\": \"Baola\"}]");
         items[0] = baobab;
         baobab = new ContentValues();
         baobab.put(Baobab.NAME, "bar");
         baobab.put(Baobab.GEOHASH, "abc2");
         baobab.put(Baobab.CATEGORIES, "[\"gastro\", \"kiosk\"]");
+        baobab.put(Baobab.PRODUCTS, "[{\"app_item_id\": 14, \"title\": \"Baola\"}," +
+                "{\"app_item_id\": 42, \"title\": \"Pulver\"}," +
+                "{\"app_item_id\": 3, \"title\": \"BaoJam\"}]");
         items[1] = baobab;
         baobab = new ContentValues();
         baobab.put(Baobab.NAME, "baz");
@@ -71,6 +75,43 @@ public class ProviderTest extends ProviderTestCase2<BaobabProvider> {
         baobabs.moveToPosition(1);
         assertEquals("name", "baz", baobabs.getString(1));
         assertEquals("geohash", "abc3", baobabs.getString(6));
+    }
+
+    public void testProducts() {
+        getMockContentResolver().bulkInsert(
+                Uri.parse("content://org.baobab.baolizer.test/baobabs"),
+                dummyBaobabs());
+        Cursor products = getMockContentResolver().query(
+                Uri.parse("content://org.baobab.baolizer.test/products"),
+                null, null, null, null);
+        assertEquals("three products", 3, products.getCount());
+        products.moveToPosition(0);
+        assertEquals("title", "Baola", products.getString(1));
+    }
+
+    public void testFilterByProducts() {
+        getMockContentResolver().bulkInsert(
+                Uri.parse("content://org.baobab.baolizer.test/baobabs"),
+                dummyBaobabs());
+        Cursor baobabs = getMockContentResolver().query(
+                Uri.parse("content://org.baobab.baolizer.test/baobabs"), null,
+                "products.title IS 'Baola' OR products.title IS 'BaoJam'",
+                null, null);
+        assertEquals("two baobabs", 2, baobabs.getCount());
+        baobabs.moveToPosition(0);
+        assertEquals("name", "bar", baobabs.getString(1));
+    }
+
+    public void testProductForBaobab() {
+        getMockContentResolver().bulkInsert(
+                Uri.parse("content://org.baobab.baolizer.test/baobabs"),
+                dummyBaobabs());
+        Cursor products = getMockContentResolver().query(
+                Uri.parse("content://org.baobab.baolizer.test/baobabs/2/products"),
+                null, null, null, null);
+        assertEquals("three products", 3, products.getCount());
+        products.moveToPosition(0);
+        assertEquals("title", "BaoJam", products.getString(1));
     }
 
 }
