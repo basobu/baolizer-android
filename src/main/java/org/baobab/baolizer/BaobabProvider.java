@@ -15,14 +15,17 @@ import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 public class BaobabProvider extends ContentProvider {
 
     private static final String TAG = "BaobabProvider";
     private SQLiteStatement getCategory;
+    private SQLiteStatement getProduct;
 
     static public class Baobab {
         public static final String CATEGORIES = "types";
+        public static final String PRODUCTS = "produkte";
         public static final String STATE = "state";
         public static final String NAME = "name";
         public static final String ZIP = "zip";
@@ -54,13 +57,22 @@ public class BaobabProvider extends ContentProvider {
                         ");");
             db.execSQL("CREATE TABLE category_baobab (" +
                             "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                            " category_id, " +
+                           " category_id, " +
+                           " baobab_id" +
+                       ");");
+            db.execSQL("CREATE TABLE categories (" +
+                           "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                           " title TEXT " +
+                       ");");
+            db.execSQL("CREATE TABLE baobab_products (" +
+                            "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                            " product_id, " +
                             " baobab_id" +
                         ");");
-            Log.d(TAG, "created DB");
-            db.execSQL("CREATE TABLE categories (" +
+            db.execSQL("CREATE TABLE products (" +
                             "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                            " name TEXT " +
+                            " title TEXT, " +
+                            " guid TEXT " +
                         ");");
             Log.d(TAG, "created DB");
         }
@@ -68,7 +80,9 @@ public class BaobabProvider extends ContentProvider {
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldV, int newV) {
             db.execSQL("DROP TABLE IF EXISTS baobabs;");
+            db.execSQL("DROP TABLE IF EXISTS products;");
             db.execSQL("DROP TABLE IF EXISTS categories;");
+            db.execSQL("DROP TABLE IF EXISTS baobab_products;");
             db.execSQL("DROP TABLE IF EXISTS category_baobab;");
             PreferenceManager.getDefaultSharedPreferences(getContext()).edit()
                     .remove(RefreshService.LAST_REFRESH).commit();
@@ -85,6 +99,7 @@ public class BaobabProvider extends ContentProvider {
     public boolean onCreate() {
         db = new DatabaseHelper(getContext());
         getCategory = db.getReadableDatabase().compileStatement(GET_CATEGORY);
+        getProduct = db.getReadableDatabase().compileStatement(GET_PRODUCT);
         return false;
     }
 
@@ -161,23 +176,45 @@ public class BaobabProvider extends ContentProvider {
     }
 
     static final String GET_CATEGORY = "SELECT _id " +
-            " FROM categories WHERE name = ?;";
+            " FROM categories WHERE title = ?;";
 
-    private void insertCategory(long baobabId, String categoryName) {
+    private void insertCategory(long baobabId, String categoryTitle) {
         ContentValues values = new ContentValues();
         values.put("baobab_id", baobabId);
-        values.put("category_id", getCategoryId(categoryName));
+        values.put("category_id", getCategoryId(categoryTitle));
         db.getWritableDatabase().insert("category_baobab", null, values);
     }
 
-    private long getCategoryId(String categoryName) {
+    private long getCategoryId(String title) {
         try {
-            getCategory.bindString(1, categoryName);
+            getCategory.bindString(1, title);
             return Long.parseLong(getCategory.simpleQueryForString());
         } catch (SQLiteDoneException e) {
             ContentValues category = new ContentValues();
-            category.put("name", categoryName);
+            category.put("title", title);
             return db.getWritableDatabase().insert("categories", null, category);
+        }
+    }
+
+    static final String GET_PRODUCT = "SELECT _id " +
+            " FROM products WHERE title = ?;";
+
+    private void insertProduct(long baobabId, String title, String guid) {
+        ContentValues values = new ContentValues();
+        values.put("baobab_id", baobabId);
+        values.put("product_id", getProductId(title, guid));
+        db.getWritableDatabase().insert("baobab_products", null, values);
+    }
+
+    private long getProductId(String title, String guid) {
+        try {
+            getProduct.bindString(1, title);
+            return Long.parseLong(getProduct.simpleQueryForString());
+        } catch (SQLiteDoneException e) {
+            ContentValues category = new ContentValues();
+            category.put("title", title);
+            category.put("guid", guid);
+            return db.getWritableDatabase().insert("products", null, category);
         }
     }
 
@@ -187,19 +224,32 @@ public class BaobabProvider extends ContentProvider {
         return null;
     }
 
+
+
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
             String[] selectionArgs, String sortOrder) {
+        Cursor results;
         if (uri.getPath().equals("/categories")) {
-            Cursor cats = db.getReadableDatabase().query("categories",
+            results = db.getReadableDatabase().query("categories",
                     null, null, null, null, null, null);
-            cats.setNotificationUri(getContext().getContentResolver(), uri);
-            return cats;
+        } else if (uri.getPath().equals("/products")) {
+            results = db.getReadableDatabase().query("products",
+                    null, null, null, null, null, null);
+        } else if (uri.getPathSegments().size() > 1) {
+            results = db.getReadableDatabase().query(
+                    "products JOIN baobab_products " +
+                    "ON products._id = baobab_products.product_id", null,
+                    "baobab_id = " + uri.getPathSegments().get(1), null,
+                    "title", null, null);
+        } else {
+            results = db.getReadableDatabase().query("baobabs " +
+                            " JOIN category_baobab ON category_baobab.baobab_id = baobabs._id " +
+                            " JOIN categories ON category_baobab.category_id = categories._id" +
+                            " LEFT OUTER JOIN baobab_products ON baobab_products.baobab_id = baobabs._id " +
+                            " LEFT OUTER JOIN products ON baobab_products.product_id = products._id",
+                    null, selection, null, Baobab.NAME, null, null);
         }
-        Cursor results = db.getReadableDatabase().query("baobabs " +
-                " JOIN category_baobab ON category_baobab.baobab_id = baobabs._id " +
-                " JOIN categories ON category_baobab.category_id = categories._id",
-                null, selection, null, Baobab.NAME, null, null);
         results.setNotificationUri(getContext().getContentResolver(), uri);
         return results;
     }
