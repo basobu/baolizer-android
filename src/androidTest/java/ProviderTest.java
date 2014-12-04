@@ -37,10 +37,15 @@ public class ProviderTest extends ProviderTestCase2<BaobabProvider> {
         return items;
     }
 
-    public void testBaobab() {
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
         getMockContentResolver().bulkInsert(
                 Uri.parse("content://org.baobab.baolizer.test/baobabs"),
                 dummyBaobabs());
+    }
+
+    public void testBaobabs() {
         Cursor baobabs = getMockContentResolver().query(
                 Uri.parse("content://org.baobab.baolizer.test/baobabs"),
                 null, null, null, null);
@@ -50,10 +55,8 @@ public class ProviderTest extends ProviderTestCase2<BaobabProvider> {
         assertEquals("geohash", "abc3", baobabs.getString(6));
     }
 
+
     public void testCategories() {
-        getMockContentResolver().bulkInsert(
-                Uri.parse("content://org.baobab.baolizer.test/baobabs"),
-                dummyBaobabs());
         Cursor categories = getMockContentResolver().query(
                 Uri.parse("content://org.baobab.baolizer.test/categories"),
                 null, null, null, null);
@@ -62,11 +65,7 @@ public class ProviderTest extends ProviderTestCase2<BaobabProvider> {
         assertEquals("name", "gastro", categories.getString(1));
     }
 
-
     public void testFilterByCategories() {
-        getMockContentResolver().bulkInsert(
-                Uri.parse("content://org.baobab.baolizer.test/baobabs"),
-                dummyBaobabs());
         Cursor baobabs = getMockContentResolver().query(
                 Uri.parse("content://org.baobab.baolizer.test/baobabs"), null,
                 "categories.title IS 'laden' OR categories.title IS 'gastro'",
@@ -78,9 +77,6 @@ public class ProviderTest extends ProviderTestCase2<BaobabProvider> {
     }
 
     public void testProducts() {
-        getMockContentResolver().bulkInsert(
-                Uri.parse("content://org.baobab.baolizer.test/baobabs"),
-                dummyBaobabs());
         Cursor products = getMockContentResolver().query(
                 Uri.parse("content://org.baobab.baolizer.test/products"),
                 null, null, null, null);
@@ -90,9 +86,6 @@ public class ProviderTest extends ProviderTestCase2<BaobabProvider> {
     }
 
     public void testFilterByProducts() {
-        getMockContentResolver().bulkInsert(
-                Uri.parse("content://org.baobab.baolizer.test/baobabs"),
-                dummyBaobabs());
         Cursor baobabs = getMockContentResolver().query(
                 Uri.parse("content://org.baobab.baolizer.test/baobabs"), null,
                 "products.title IS 'Baola' OR products.title IS 'BaoJam'",
@@ -103,9 +96,6 @@ public class ProviderTest extends ProviderTestCase2<BaobabProvider> {
     }
 
     public void testProductForBaobab() {
-        getMockContentResolver().bulkInsert(
-                Uri.parse("content://org.baobab.baolizer.test/baobabs"),
-                dummyBaobabs());
         Cursor products = getMockContentResolver().query(
                 Uri.parse("content://org.baobab.baolizer.test/baobabs/2/products"),
                 null, null, null, null);
