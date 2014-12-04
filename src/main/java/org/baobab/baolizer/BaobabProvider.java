@@ -158,6 +158,16 @@ public class BaobabProvider extends ContentProvider {
                         insertCategory(id, categories.getString(j));
                     }
                 }
+                if (baobab.containsKey(Baobab.PRODUCTS)) {
+                    Log.d(TAG, "json: " + baobab.getAsString(Baobab.CATEGORIES));
+                    JSONArray products = new JSONArray(
+                            baobab.getAsString(Baobab.PRODUCTS));
+                    for (int j = 0; j < products.length(); j++) {
+                        JSONObject product = products.getJSONObject(j);
+                        insertProduct(id, product.getString("title"),
+                                product.getString("app_item_id"));
+                    }
+                }
             }
             db.getWritableDatabase().setTransactionSuccessful();
         } catch (JSONException e) {
