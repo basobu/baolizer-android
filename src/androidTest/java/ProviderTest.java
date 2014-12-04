@@ -95,6 +95,16 @@ public class ProviderTest extends ProviderTestCase2<BaobabProvider> {
         assertEquals("name", "bar", baobabs.getString(1));
     }
 
+    public void testFilterByCategoriesAndProducts() {
+        Cursor baobabs = getMockContentResolver().query(
+                Uri.parse("content://org.baobab.baolizer.test/baobabs"), null,
+                "products.title IS 'BaoJam' OR categories.title IS 'markt'",
+                null, null);
+        assertEquals("two baobabs", 2, baobabs.getCount());
+        baobabs.moveToPosition(0);
+        assertEquals("name", "bar", baobabs.getString(1));
+    }
+
     public void testProductForBaobab() {
         Cursor products = getMockContentResolver().query(
                 Uri.parse("content://org.baobab.baolizer.test/baobabs/2/products"),
