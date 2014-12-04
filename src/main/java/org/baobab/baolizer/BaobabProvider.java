@@ -40,7 +40,7 @@ public class BaobabProvider extends ContentProvider {
         static final String TAG = "BaobabProvider";
 
         public DatabaseHelper(Context context) {
-            super(context, "baobab.db", null, 2);
+            super(context, "baobab.db", null, 3);
         }
 
         @Override
