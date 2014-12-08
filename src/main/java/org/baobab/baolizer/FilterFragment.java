@@ -54,7 +54,7 @@ public class FilterFragment extends Fragment implements
         list = (ListView) frame.findViewById(R.id.categories);
         list.setAdapter(adapter);
         list.setOnItemClickListener(this);
-        getActivity().getSupportLoaderManager().initLoader(1, null, this);
+        getActivity().getSupportLoaderManager().initLoader(getId(), null, this);
         return frame;
     }
 
