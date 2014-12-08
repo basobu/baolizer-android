@@ -103,9 +103,14 @@ public class MapActivity  extends ActionBarActivity implements
     public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
         return new CursorLoader(this,
                 Uri.parse("content://org.baobab.baolizer/baobabs"),
-                null, ((FilterFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.categories)).getWhereClause(),
-                null,  null);
+                null, getWhereClause(), null,  null);
+    }
+
+    private String getWhereClause() {
+        return "(" + ((FilterFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.products)).getWhereClause() +
+                ") AND (" + ((FilterFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.categories)).getWhereClause() + ")";
     }
 
     @Override
