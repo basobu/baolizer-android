@@ -80,16 +80,10 @@ public class MapActivity  extends ActionBarActivity implements
     public void onClick(View btn) {
         switch (btn.getId()) {
             case R.id.hand:
-                Toast.makeText(this, "was Hand?", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "..Hand?", Toast.LENGTH_LONG).show();
 //                openWebsite("http://map.baobab.org/submit/");
                 break;
             case R.id.filter:
-                SlidingDrawer drawer = (SlidingDrawer) findViewById(R.id.drawer);
-                if (drawer.isOpened()) {
-                    drawer.animateClose();
-                } else {
-                    drawer.animateOpen();
-                }
                 break;
             case R.id.info:
                 startActivity(new Intent(this, SettingsActivity.class));
@@ -101,11 +95,6 @@ public class MapActivity  extends ActionBarActivity implements
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            SlidingDrawer drawer = (SlidingDrawer) findViewById(R.id.drawer);
-            if (drawer.isOpened()) {
-                drawer.animateClose();
-                return true;
-            }
         }
         return super.onKeyUp(keyCode, event);
     }
