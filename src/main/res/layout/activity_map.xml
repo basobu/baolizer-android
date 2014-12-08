@@ -49,14 +49,20 @@
 
 
   </FrameLayout>
-  <fragment
+  <LinearLayout
+    android:layout_gravity="right"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <fragment
       android:id="@+id/categories"
       app:filter_table="categories"
       app:filter_column="category_baobab.category_id"
-      android:layout_gravity="right"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
+      android:layout_height="wrap_content"
       android:layout_marginLeft="123dp"
       class="org.baobab.baolizer.FilterFragment" />
+
+  </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>
