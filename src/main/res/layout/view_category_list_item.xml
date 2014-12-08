@@ -9,8 +9,7 @@
   android:gravity="center_vertical|right"
   android:paddingLeft="16dp"
   android:paddingRight="16dp"
-  android:textColor="#fff"
-  android:background="?android:attr/activatedBackgroundIndicator"
-  android:minHeight="?android:attr/listPreferredItemHeightSmall"
-  >
+  android:textColor="@color/filter_item_text"
+  android:background="@drawable/bg_filter_item"
+  android:minHeight="?android:attr/listPreferredItemHeightSmall" >
 </TextView>
