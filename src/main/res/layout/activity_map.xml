@@ -57,7 +57,6 @@
     <fragment
       android:id="@+id/categories"
       app:filter_table="categories"
-      app:filter_column="category_baobab.category_id"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginLeft="123dp"

@@ -2,6 +2,5 @@
 <resources>
   <declare-styleable name="FilterFragment">
     <attr name="filter_table" format="string"/>
-    <attr name="filter_column" format="string"/>
   </declare-styleable>
 </resources>

@@ -27,13 +27,11 @@ public class FilterFragment extends Fragment implements
     private ListView list;
     private CursorAdapter adapter;
     private CharSequence filter_table;
-    private CharSequence filter_column;
 
     @Override
     public void onInflate(Activity activity, AttributeSet attrs, Bundle savedInstanceState) {
         TypedArray a = activity.obtainStyledAttributes(attrs, R.styleable.FilterFragment);
         filter_table = a.getText(R.styleable.FilterFragment_filter_table);
-        filter_column = a.getText(R.styleable.FilterFragment_filter_column);
         a.recycle();
         super.onInflate(activity, attrs, savedInstanceState);
     }
@@ -89,14 +87,14 @@ public class FilterFragment extends Fragment implements
 
     public String getWhereClause() {
         StringBuffer where = new StringBuffer();
-        where.append("geohash = 'nixselected'");
+        where.append("geohash = 'no select'");
         Cursor items = adapter.getCursor();
         if (items == null) return null;
         SparseBooleanArray selection = list.getCheckedItemPositions();
         for (int i = 0; i < selection.size(); i++) {
             if (selection.get(i)) {
                 items.moveToPosition(i);
-                where.append(" OR " + filter_column + " = ")
+                where.append(" OR " + filter_table + ".id = ")
                         .append(items.getString(0));
             }
         }
