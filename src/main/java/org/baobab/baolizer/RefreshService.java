@@ -32,6 +32,7 @@ public class RefreshService extends IntentService {
     public static final String BASE_URL =
             "http://baolizer.baobab.org/public/";
     public static final String URL = BASE_URL + "items.json";
+    private static final String PRODUCTS = "produkte";
     private static final String TYP = "typ";
     private static final String KOMMA = ",";
     private static final String LATLON = "latlon";
@@ -96,6 +97,8 @@ public class RefreshService extends IntentService {
                 if (val != null) values.put(Baobab.STREET, val);
                 val = item.getString(TYP);
                 if (val != null) values.put(Baobab.CATEGORIES, val);
+                val = item.getString(PRODUCTS);
+                if (val != null) values.put(Baobab.PRODUCTS, val);
                 items.add(values);
                 Log.d(TAG, " + " + values);
             }
