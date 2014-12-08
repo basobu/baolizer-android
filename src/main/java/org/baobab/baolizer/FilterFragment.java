@@ -94,7 +94,7 @@ public class FilterFragment extends Fragment implements
         for (int i = 0; i < selection.size(); i++) {
             if (selection.get(i)) {
                 items.moveToPosition(i);
-                where.append(" OR " + filter_table + ".id = ")
+                where.append(" OR " + filter_table + "._id = ")
                         .append(items.getString(0));
             }
         }
