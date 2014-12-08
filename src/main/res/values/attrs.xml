@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <declare-styleable name="FilterFragment">
+    <attr name="filter_table" format="string"/>
+    <attr name="filter_column" format="string"/>
+  </declare-styleable>
+</resources>

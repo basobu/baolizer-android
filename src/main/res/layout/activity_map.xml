@@ -1,5 +1,6 @@
 <android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -50,6 +51,8 @@
   </FrameLayout>
   <fragment
       android:id="@+id/categories"
+      app:filter_table="categories"
+      app:filter_column="category_baobab.category_id"
       android:layout_gravity="right"
       android:layout_width="match_parent"
       android:layout_height="match_parent"

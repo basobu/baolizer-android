@@ -1,6 +1,8 @@
 package org.baobab.baolizer;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
+import android.util.AttributeSet;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +26,17 @@ public class FilterFragment extends Fragment implements
 
     private ListView list;
     private CursorAdapter adapter;
+    private CharSequence filter_table;
+    private CharSequence filter_column;
+
+    @Override
+    public void onInflate(Activity activity, AttributeSet attrs, Bundle savedInstanceState) {
+        TypedArray a = activity.obtainStyledAttributes(attrs, R.styleable.FilterFragment);
+        filter_table = a.getText(R.styleable.FilterFragment_filter_table);
+        filter_column = a.getText(R.styleable.FilterFragment_filter_column);
+        a.recycle();
+        super.onInflate(activity, attrs, savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inf, ViewGroup parent, Bundle savedInstanceState) {
@@ -46,11 +60,10 @@ public class FilterFragment extends Fragment implements
         return frame;
     }
 
-
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(getActivity(),
-                Uri.parse("content://org.baobab.baolizer/categories"),
+                Uri.parse("content://org.baobab.baolizer/" + filter_table),
                 null, null, null, null);
     }
 
@@ -77,14 +90,14 @@ public class FilterFragment extends Fragment implements
     public String getWhereClause() {
         StringBuffer where = new StringBuffer();
         where.append("geohash = 'nixselected'");
-        Cursor categories = adapter.getCursor();
-        if (categories == null) return null;
+        Cursor items = adapter.getCursor();
+        if (items == null) return null;
         SparseBooleanArray selection = list.getCheckedItemPositions();
         for (int i = 0; i < selection.size(); i++) {
             if (selection.get(i)) {
-                categories.moveToPosition(i);
-                where.append(" OR category_baobab.category_id = ")
-                        .append(categories.getString(0));
+                items.moveToPosition(i);
+                where.append(" OR " + filter_column + " = ")
+                        .append(items.getString(0));
             }
         }
         return where.toString();
