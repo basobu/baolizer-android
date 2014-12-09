@@ -47,7 +47,28 @@ public class WebFragment extends Fragment {
         webView.getSettings().setSaveFormData(false);
         webView.getSettings().setSavePassword(false);
         webView.requestFocus(View.FOCUS_DOWN);
-        webView.loadUrl(getArguments().getString("url"));
+        if (getArguments() != null) {
+            load(getArguments().getString("url"));
+        }
+        webView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+                Crouton.makeText(getActivity(), message, Style.ALERT).show();
+                result.cancel();
+                return true; //super.onJsAlert(view, get, message, result);
+            }
+        });
+        frame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
+        return frame;
+    }
+
+    public void load(String url) {
+        webView.loadUrl(url);
 
         webView.setWebViewClient(new WebViewClient() {
 
@@ -83,21 +104,5 @@ public class WebFragment extends Fragment {
                 return super.shouldOverrideUrlLoading(view, url);
             }
         });
-
-        webView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-                Crouton.makeText(getActivity(), message, Style.ALERT).show();
-                result.cancel();
-                return true; //super.onJsAlert(view, url, message, result);
-            }
-        });
-        frame.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().getSupportFragmentManager().popBackStack();
-            }
-        });
-        return frame;
     }
 }
