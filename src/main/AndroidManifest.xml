@@ -38,6 +38,11 @@
             android:label="@string/app_name" />
 
         <activity
+            android:name="org.baobab.baolizer.ProfileActivity"
+            android:label="@string/profile"
+            android:theme="@android:style/Theme.Dialog" />
+
+        <activity
             android:name="org.baobab.baolizer.MapActivity"
             android:icon="@drawable/ic_launcher"
             android:configChanges="orientation|keyboardHidden|screenSize" >

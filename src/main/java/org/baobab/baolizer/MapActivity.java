@@ -16,18 +16,17 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.SlidingDrawer;
 import android.widget.Toast;
 
-import static com.google.android.gms.common.GooglePlayServicesUtil.*;
-import static com.google.android.gms.common.ConnectionResult.*;
-
 import ch.hsr.geohash.GeoHash;
+
+import static com.google.android.gms.common.ConnectionResult.SUCCESS;
+import static com.google.android.gms.common.GooglePlayServicesUtil.isGooglePlayServicesAvailable;
 
 public class MapActivity  extends ActionBarActivity implements
         View.OnClickListener, LoaderCallbacks<Cursor> {
 
-    private static final String TAG = "Baolizer";
+    public static final String TAG = "Baolizer";
     public static final String SUBMIT = "submit/";
     public static final String WEBVIEW = "webview/";
     private static final String PAGE_HTML = ".page.html";
@@ -84,6 +83,7 @@ public class MapActivity  extends ActionBarActivity implements
 //                openWebsite("http://map.baobab.org/submit/");
                 break;
             case R.id.filter:
+                startActivity(new Intent(this, ProfileActivity.class));
                 break;
             case R.id.info:
                 startActivity(new Intent(this, SettingsActivity.class));

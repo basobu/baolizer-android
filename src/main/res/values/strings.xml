@@ -34,5 +34,6 @@
     <item>Google Maps</item>
   </string-array>
   <string name="app_id">410064079145534</string>
+    <string name="profile">Profil</string>
 
 </resources>
