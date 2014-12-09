@@ -13,4 +13,6 @@
     <dimen name="margin_btn_info_left">200dp</dimen>
     <dimen name="margin_btn_info_top">4dp</dimen>
 
+    <dimen name="padding">64dp</dimen>
+
 </resources>

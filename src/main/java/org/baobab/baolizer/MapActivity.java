@@ -142,14 +142,17 @@ public class MapActivity  extends ActionBarActivity implements
     }
 
     public void onBaobabClicked(String id) {
-        openWebsite(RefreshService.BASE_URL +
-                WEBVIEW + id + PAGE_HTML);
+        Log.d(TAG, "clicked " + id);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, DetailsFragment.newInstance(id))
+                .addToBackStack("details")
+                .commit();
     }
 
     private void openWebsite(String url) {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, WebFragment.newInstance(url))
-                .addToBackStack("submit")
+                .addToBackStack("web")
                 .commit();
     }
 

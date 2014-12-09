@@ -1,7 +1,6 @@
 package org.baobab.baolizer;
 
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
