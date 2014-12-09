@@ -49,8 +49,8 @@ public class MapboxFragment extends Fragment implements MapActivity.Map {
     }
 
     @Override
-    public void addBaobab(GeoHash latlng, String url, String title, String description) {
-        Marker m = new Baobab(url, title, description,
+    public void addBaobab(GeoHash latlng, String id, String title, String description) {
+        Marker m = new Baobab(id, title, description,
             new LatLng(latlng.getPoint().getLatitude(),
                     latlng.getPoint().getLongitude()));
         map.addMarker(m);
@@ -60,11 +60,11 @@ public class MapboxFragment extends Fragment implements MapActivity.Map {
 
         private final String id;
 
-        public Baobab(String url, String title, String description, LatLng latLng) {
+        public Baobab(String id, String title, String description, LatLng latLng) {
             super(map, title, description, latLng);
             setMarker(getResources().getDrawable(R.drawable.tree));
             setHotspot(Marker.HotspotPlace.BOTTOM_CENTER);
-            this.id = url;
+            this.id = id;
         }
 
         @Override

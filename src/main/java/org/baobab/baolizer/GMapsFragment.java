@@ -10,12 +10,15 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.HashMap;
 
 import ch.hsr.geohash.GeoHash;
 
 public class GMapsFragment extends SupportMapFragment implements MapActivity.Map {
+
+    HashMap<String, String> get = new HashMap<String, String>(500);
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -27,7 +30,8 @@ public class GMapsFragment extends SupportMapFragment implements MapActivity.Map
         getMap().setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(com.google.android.gms.maps.model.Marker marker) {
-                ((MapActivity) getActivity()).onBaobabClicked(marker.getId());
+                ((MapActivity) getActivity())
+                        .onBaobabClicked(get.get(marker.getId()));
             }
         });
     }
@@ -38,8 +42,8 @@ public class GMapsFragment extends SupportMapFragment implements MapActivity.Map
     }
 
     @Override
-    public void addBaobab(GeoHash latlng, String url, String title, String description) {
-        getMap().addMarker(
+    public void addBaobab(GeoHash latlng, String id, String title, String description) {
+        get.put(getMap().addMarker(
             new MarkerOptions()
                 .title(title)
                 .snippet(description)
@@ -48,6 +52,6 @@ public class GMapsFragment extends SupportMapFragment implements MapActivity.Map
                 .position(new LatLng(
                     latlng.getPoint().getLatitude(),
                     latlng.getPoint().getLongitude()))
-        );
+        ).getId(), id);
     }
 }
