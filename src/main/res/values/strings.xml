@@ -33,5 +33,6 @@
     <item>Mapbox Openstreetmap</item>
     <item>Google Maps</item>
   </string-array>
+  <string name="app_id">410064079145534</string>
 
 </resources>

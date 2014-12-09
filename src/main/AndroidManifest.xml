@@ -27,7 +27,15 @@
         android:theme="@style/AppTheme" >
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyCDIrJ_cz784bB-YRBJbHh3DJ1IgNry8JY" />
+            android:value="AIzaSyCXS3IlhMnXXHZ7Ppgj_oWbqhA0Sva3XhY" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/app_id"/>
+
+        <activity
+            android:name="com.facebook.LoginActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:label="@string/app_name" />
 
         <activity
             android:name="org.baobab.baolizer.MapActivity"
