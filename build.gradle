@@ -4,11 +4,9 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:0.14.2'
-        classpath 'com.alexvasilkov:android-sign-release:0.8.1'
     }
 }
 apply plugin: 'android'
-apply plugin: 'com.alexvasilkov.sign'
 
 repositories {
     mavenCentral()
@@ -32,11 +30,15 @@ android {
     buildToolsVersion "20.0.0"
 
     signingConfigs {
-        release {
-            storeFile file("basobu.keystore")
-            keyAlias "baolizer"
-        }
+        release
     }
+
+    def props = new Properties()
+    props.load(new FileInputStream(rootProject.file("release.properties")))
+    android.signingConfigs.release.storeFile rootProject.file(props.keyStore)
+    android.signingConfigs.release.storePassword props.keyStorePassword
+    android.signingConfigs.release.keyAlias props.keyAlias
+    android.signingConfigs.release.keyPassword props.keyAliasPassword
 
     buildTypes {
         release {
