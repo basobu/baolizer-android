@@ -89,7 +89,7 @@ public class FilterFragment extends Fragment implements
         StringBuffer where = new StringBuffer();
         where.append("geohash = 'no select'");
         Cursor items = adapter.getCursor();
-        if (items == null) return null;
+        if (items == null) return "baobabs._id > 0";
         SparseBooleanArray selection = list.getCheckedItemPositions();
         for (int i = 0; i < selection.size(); i++) {
             if (selection.get(i)) {
