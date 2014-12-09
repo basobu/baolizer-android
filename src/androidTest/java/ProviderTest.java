@@ -23,6 +23,7 @@ public class ProviderTest extends ProviderTestCase2<BaobabProvider> {
         items[0] = baobab;
         baobab = new ContentValues();
         baobab.put(Baobab.NAME, "bar");
+        baobab.put(Baobab.PODIO_ID, "42");
         baobab.put(Baobab.GEOHASH, "abc2");
         baobab.put(Baobab.CATEGORIES, "[\"gastro\", \"kiosk\"]");
         baobab.put(Baobab.PRODUCTS, "[{\"app_item_id\": 14, \"title\": \"Baola\"}," +
@@ -107,7 +108,7 @@ public class ProviderTest extends ProviderTestCase2<BaobabProvider> {
 
     public void testProductForBaobab() {
         Cursor products = getMockContentResolver().query(
-                Uri.parse("content://org.baobab.baolizer.test/baobabs/2/products"),
+                Uri.parse("content://org.baobab.baolizer.test/baobabs/42/products"), // podio id
                 null, null, null, null);
         assertEquals("three products", 3, products.getCount());
         products.moveToPosition(0);

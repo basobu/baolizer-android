@@ -248,9 +248,10 @@ public class BaobabProvider extends ContentProvider {
                     null, null, null, null, null, null);
         } else if (uri.getPathSegments().size() > 1) {
             results = db.getReadableDatabase().query(
-                    "products JOIN baobab_products " +
-                    "ON products._id = baobab_products.product_id", null,
-                    "baobab_id = " + uri.getPathSegments().get(1), null,
+                    "products JOIN baobab_products" +
+                    " ON products._id = baobab_products.product_id" +
+                    " JOIN baobabs ON baobab_id = baobabs._id", null,
+                    "podio_id = " + uri.getPathSegments().get(1), null,
                     "title", null, null);
         } else {
             results = db.getReadableDatabase().query("baobabs " +
