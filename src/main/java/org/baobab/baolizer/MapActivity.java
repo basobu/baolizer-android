@@ -70,22 +70,22 @@ public class MapActivity  extends ActionBarActivity implements
     protected void onResume() {
         super.onResume();
         getSupportLoaderManager().initLoader(0, null, this);
-        findViewById(R.id.hand).setOnClickListener(this);
+        findViewById(R.id.plant).setOnClickListener(this);
+        findViewById(R.id.profile).setOnClickListener(this);
         findViewById(R.id.filter).setOnClickListener(this);
-        findViewById(R.id.info).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View btn) {
         switch (btn.getId()) {
-            case R.id.hand:
-                Toast.makeText(this, "..Hand?", Toast.LENGTH_LONG).show();
-//                openWebsite("http://map.baobab.org/submit/");
+            case R.id.plant:
+                Toast.makeText(this, "pflanz..", Toast.LENGTH_LONG).show();
+                openWebsite("http://map.baobab.org/submit/");
                 break;
-            case R.id.filter:
+            case R.id.profile:
                 startActivity(new Intent(this, ProfileActivity.class));
                 break;
-            case R.id.info:
+            case R.id.filter:
                 startActivity(new Intent(this, SettingsActivity.class));
                 break;
             default:

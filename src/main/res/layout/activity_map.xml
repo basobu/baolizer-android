@@ -21,31 +21,31 @@
         android:src="@drawable/frame_tree"/>
 
     <ImageButton
-        android:id="@+id/hand"
+        android:id="@+id/plant"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_btn"
+        android:background="@drawable/bg_fruit"
         android:layout_marginLeft="@dimen/margin_btn_hand_left"
         android:layout_marginTop="@dimen/margin_btn_hand_top"
-        android:src="@drawable/btn_hand" />
+        android:src="@drawable/ic_samen" />
+
+    <ImageButton
+        android:id="@+id/profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_fruit"
+        android:layout_marginLeft="@dimen/margin_btn_filter_left"
+        android:layout_marginTop="@dimen/margin_btn_filter_top"
+        android:src="@drawable/ic_profil" />
 
     <ImageButton
         android:id="@+id/filter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_btn"
-        android:layout_marginLeft="@dimen/margin_btn_filter_left"
-        android:layout_marginTop="@dimen/margin_btn_filter_top"
-        android:src="@drawable/btn_filter" />
-
-    <ImageButton
-        android:id="@+id/info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_btn"
         android:layout_marginLeft="@dimen/margin_btn_info_left"
         android:layout_marginTop="@dimen/margin_btn_info_top"
-        android:src="@drawable/btn_info" />
+        android:src="@drawable/ic_orientierung" />
 
 
   </FrameLayout>
