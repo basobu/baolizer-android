@@ -1,9 +1,9 @@
 <android.support.v4.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/drawer_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/drawer_layout"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
 
   <FrameLayout
     android:id="@+id/container"
@@ -13,42 +13,81 @@
     <FrameLayout
       android:id="@+id/frame"
       android:layout_width="match_parent"
-      android:layout_height="match_parent" />
+      android:layout_height="match_parent" >
+
+    </FrameLayout>
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/frame_tree"/>
+      android:id="@+id/tree_bottom"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom"
+      android:src="@drawable/tree_bottom" />
+
+    <ImageView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@drawable/tree_top" />
 
     <ImageButton
-        android:id="@+id/plant"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_fruit"
-        android:layout_marginLeft="@dimen/margin_btn_hand_left"
-        android:layout_marginTop="@dimen/margin_btn_hand_top"
-        android:src="@drawable/ic_samen" />
+      android:id="@+id/plant"
+      android:layout_width="72dp"
+      android:layout_height="89dp"
+      android:background="@drawable/bg_fruit"
+      android:layout_marginLeft="@dimen/margin_btn_plant_left"
+      android:layout_marginTop="@dimen/margin_btn_plant_top"
+      android:src="@drawable/ic_samen" />
+
 
     <ImageButton
-        android:id="@+id/profile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_fruit"
-        android:layout_marginLeft="@dimen/margin_btn_filter_left"
-        android:layout_marginTop="@dimen/margin_btn_filter_top"
-        android:src="@drawable/ic_profil" />
+      android:id="@+id/profile"
+      android:layout_width="48dp"
+      android:layout_height="59dp"
+      android:background="@drawable/bg_fruit"
+      android:layout_marginLeft="@dimen/margin_btn_profile_left"
+      android:layout_marginTop="@dimen/margin_btn_profile_top"
+      android:src="@drawable/ic_profil" />
 
     <ImageButton
-        android:id="@+id/filter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_btn"
-        android:layout_marginLeft="@dimen/margin_btn_info_left"
-        android:layout_marginTop="@dimen/margin_btn_info_top"
-        android:src="@drawable/ic_orientierung" />
+      android:id="@+id/filter"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:background="@drawable/bg_fruit"
+      android:layout_marginLeft="@dimen/margin_btn_filter_left"
+      android:layout_marginTop="@dimen/margin_btn_filter_top"
+      android:src="@drawable/ic_orientierung" />
 
+    <View
+      android:id="@+id/gradient"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/gradient_height"
+      android:layout_marginLeft="@dimen/gradient_margin_left"
+      android:layout_gravity="bottom"
+      android:background="@drawable/gradient" />
+
+    <Button
+      android:id="@+id/impressum"
+      android:layout_marginLeft="@dimen/gradient_margin_left"
+      android:layout_gravity="bottom"
+      android:textSize="12sp"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:textColor="@color/font_green"
+      android:background="@drawable/bg_green"
+      android:text="@string/impressum" />
+
+    <Button
+      android:id="@+id/settings"
+      android:textSize="12dp"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="right|bottom"
+      android:textColor="@color/font_beige"
+      android:background="@drawable/bg_beige"
+      android:text="@string/settings" />
 
   </FrameLayout>
+
   <LinearLayout
     android:orientation="vertical"
     android:layout_gravity="right"

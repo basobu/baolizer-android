@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- hand position -->
-    <dimen name="margin_btn_hand_left">64dp</dimen>
-    <dimen name="margin_btn_hand_top">32dp</dimen>
+    <!-- samen pflanzen position -->
+    <dimen name="margin_btn_plant_left">32dp</dimen>
+    <dimen name="margin_btn_plant_top">77dp</dimen>
 
-    <!-- filter position -->
-    <dimen name="margin_btn_filter_left">128dp</dimen>
-    <dimen name="margin_btn_filter_top">16dp</dimen>
+    <!-- profil position -->
+    <dimen name="margin_btn_profile_left">134dp</dimen>
+    <dimen name="margin_btn_profile_top">63dp</dimen>
 
-    <!-- info position -->
-    <dimen name="margin_btn_info_left">200dp</dimen>
-    <dimen name="margin_btn_info_top">4dp</dimen>
+    <!-- orientierung position -->
+    <dimen name="margin_btn_filter_left">200dp</dimen>
+    <dimen name="margin_btn_filter_top">108dp</dimen>
 
     <dimen name="padding">64dp</dimen>
+    <dimen name="gradient_height">45dp</dimen>
+    <dimen name="gradient_margin_left">149dp</dimen>
 
 </resources>

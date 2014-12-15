@@ -11,6 +11,7 @@ apply plugin: 'android'
 repositories {
     mavenCentral()
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+    maven { url 'http://repo.spring.io/snapshot' }
 }
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
@@ -24,6 +25,7 @@ dependencies {
     compile ('com.cocoahero.android:geojson:1.0.0@aar'){
         transitive=true
     }
+    //compile ('org.springframework:spring-websocket:4.1.0.BUILD-SNAPSHOT')
 }
 
 android {

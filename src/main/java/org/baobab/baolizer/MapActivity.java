@@ -3,6 +3,7 @@ package org.baobab.baolizer;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -12,11 +13,21 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+//import org.springframework.web.socket.sockjs.client.RestTemplateXhrTransport;
+//import org.springframework.web.socket.sockjs.client.SockJsClient;
+//import org.springframework.web.socket.sockjs.client.WebSocketTransport;
+
+import java.util.List;
 
 import ch.hsr.geohash.GeoHash;
 
@@ -43,6 +54,12 @@ public class MapActivity  extends ActionBarActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         startService(new Intent(this, RefreshService.class));
+//        List<Transport> transports = new ArrayList<>(2);
+//        transports.add(new WebSocketTransport(StandardWebSocketClient()));
+//        transports.add(new RestTemplateXhrTransport());
+//
+//        SockJsClient sockJsClient = new SockJsClient(transports);
+//        sockJsClient.doHandshake(new MyWebSocketHandler(), "ws://example.com:8080/sockjs");
     }
 
     @Override
@@ -76,16 +93,36 @@ public class MapActivity  extends ActionBarActivity implements
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        ((ImageView) findViewById(R.id.tree_bottom))
+                .setImageDrawable(getResources()
+                        .getDrawable(R.drawable.tree_bottom));
+        findViewById(R.id.gradient).getLayoutParams().height =
+                (int) getResources().getDimension(R.dimen.gradient_height);
+        ((FrameLayout.LayoutParams) findViewById(R.id.gradient)
+                .getLayoutParams()).setMargins((int) getResources()
+                .getDimension(R.dimen.gradient_margin_left), 0, 0, 0);
+    }
+
+    @Override
     public void onClick(View btn) {
         switch (btn.getId()) {
             case R.id.plant:
-                Toast.makeText(this, "pflanz..", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "pflanzt..", Toast.LENGTH_LONG).show();
                 openWebsite("http://map.baobab.org/submit/");
                 break;
             case R.id.profile:
                 startActivity(new Intent(this, ProfileActivity.class));
                 break;
             case R.id.filter:
+                ((DrawerLayout) findViewById(R.id.drawer_layout))
+                        .openDrawer(Gravity.END);
+                break;
+            case R.id.impressum:
+                Toast.makeText(this, "Impressum", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.settings:
                 startActivity(new Intent(this, SettingsActivity.class));
                 break;
             default:
@@ -95,6 +132,12 @@ public class MapActivity  extends ActionBarActivity implements
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            DrawerLayout drawer = (DrawerLayout)
+                    findViewById(R.id.drawer_layout);
+            if (drawer.isDrawerOpen(Gravity.END)) {
+                drawer.closeDrawer(Gravity.END);
+                return true;
+            }
         }
         return super.onKeyUp(keyCode, event);
     }

@@ -26,6 +26,7 @@
         android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/btn_info" />
+        android:background="@drawable/bg_fruit"
+        android:src="@drawable/ic_kommunikation" />
 
 </RelativeLayout>

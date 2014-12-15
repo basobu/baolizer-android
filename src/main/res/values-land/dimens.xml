@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="gradient_height">30dp</dimen>
+    <dimen name="gradient_margin_left">99dp</dimen>
+
+</resources>
