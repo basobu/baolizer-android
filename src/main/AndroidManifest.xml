@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.baobab.baolizer"
-    android:versionCode="5"
-    android:versionName="0.5 alpha" >
+    android:versionCode="6"
+    android:versionName="0.6 extra für Lukas gebaut" >
 
     <uses-sdk
         android:minSdkVersion="9"
